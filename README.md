@@ -39,14 +39,16 @@ Justify the tools/structure of your solution
 # Criteria B: Design
 
 ## System Diagram
-
+![](unit1_system_diagram.jpg)
+*fig.1* System diagram of proposed solution
 ## Flow Diagrams
 
 
 ## Record of Tasks
-| Task No | Planned Action                                                | Planned Outcome                                                                                                 | Time estimate | Target completion date | Criterion |
-|---------|---------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|---------------|------------------------|-----------|
-| 1       | Create system diagram                                         | To have a clear idea of the hardware and software requirements for the proposed solution                        | 10min         | Sep 24                 | B         |
+| Task No | Planned Action        | Planned Outcome                                                                          | Time estimate | Target completion date | Criterion |
+|---------|-----------------------|------------------------------------------------------------------------------------------|---------------|------------------------|-----------|
+| 1       | Create system diagram | To have a clear idea of the hardware and software requirements for the proposed solution | 10 min        | Sep 13                 | B         |
+| 2       | Create a login system | To have a flow diagram and the code for the login system                                 | 30 min        | Sep 14                 | B, C      |
 
 # Criteria C: Development
 
