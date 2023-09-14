@@ -33,8 +33,8 @@ Justify the tools/structure of your solution
 2. The electronic ledger display the basic description of the cyrptocurrency selected.
 3. The electronic ledger allows to enter, withdraw and record transactions.
 4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and total balance.
-5. The electronic ledger can store the data of multiple users, assuming they are using the same cryptocurrency.
-6. The electronic ledger has a readable user interface, such as through the use of colors, tables, and graphs.
+5. The electronic ledger 
+6. The electronic ledger 
 
 # Criteria B: Design
 
