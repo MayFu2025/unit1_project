@@ -1,7 +1,6 @@
 # Create a login function!
-
 def try_login(name: str, password: str) -> bool:
-    with open('users_lesson_0914.csv', mode='r') as f:
+    with open('users.csv', mode='r') as f:
         data = f.readlines()
 
     success = False
@@ -15,8 +14,7 @@ def try_login(name: str, password: str) -> bool:
 
     return success
 
-
-# Testing
+# test logging-in
 attempts = 3
 
 in_name = input("Enter your username: ")
@@ -36,3 +34,34 @@ if result is False:
 
 # The program continues here if it doesn't close
 print("Welcome")
+
+
+
+# Create a create new account option!
+import csv
+def create_user():
+    with open('users.csv', mode='r') as users_list:
+        users_database = users_list.readlines()
+    new_name = input("Create a username: ")
+    validate = True
+    while validate == True:
+        for user in users_database:
+            if new_name in user:
+                new_name = input("Username already taken. Please enter another username: ")
+            else:
+                validate = False
+    new_pass = input("Create a password: ")
+    confirm_new_pass = input("Confirm new password: ")
+    validate = True
+    while validate == True:
+        if confirm_new_pass != new_pass:
+            new_pass = input("Passwords do not match. Create a password: ")
+            confirm_new_pass = input("Confirm new password: ")
+        else:
+            validate = False
+    with open('users.csv', mode='a') as users_list:
+        writer = csv.writer(users_list)
+        writer.writerow([new_name, new_pass])
+
+# test creation of new user:
+create_user()
