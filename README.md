@@ -32,9 +32,11 @@ Justify the tools/structure of your solution
 1. The electronic ledger is a text-based software (Runs in the Terminal).
 2. The electronic ledger display the basic description of the cyrptocurrency selected.
 3. The electronic ledger allows to enter, withdraw and record transactions.
-4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and total balance.
-5. The electronic ledger is password protected.
-6. The electronic ledger 
+4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance.
+5. The electronic ledger organizes transactions based on categories such as "Expenses," "Food," "Clothes," etc.
+6. The electronic ledger allows the creation of new users. *(Not sure if this fits with the problem definition)
+
+7. The electronic ledger is password protected *(May be more suitable?)
 
 # Criteria B: Design
 
