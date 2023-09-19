@@ -32,9 +32,11 @@ Justify the tools/structure of your solution
 1. The electronic ledger is a text-based software (Runs in the Terminal).
 2. The electronic ledger display the basic description of the cyrptocurrency selected.
 3. The electronic ledger allows to enter, withdraw and record transactions.
-4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and total balance.
-5. The electronic ledger is password protected.
-6. The electronic ledger 
+4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance.
+5. The electronic ledger organizes transactions based on categories such as "Expenses," "Food," "Clothes," etc.
+6. The electronic ledger allows the creation of new users. *(Not sure if this fits with the problem definition)
+
+7. The electronic ledger is password protected *(May be more suitable?)
 
 # Criteria B: Design
 
@@ -53,26 +55,24 @@ Justify the tools/structure of your solution
 # Criteria C: Development
 
 ## Login System
-My client requires a system to protect the private data. I thought about using a login system to accomplish this requirement using a if condition and the open command to work with a csv file. More description of the code....
+My client requires a system to protect the private data. I thought about using a login system to accomplish this requirement using a if condition and the open command to work with a csv file.
+
+In the first line, I define the function try_login. The try_login function takes two parameters. name, which is a string, and password, which is also a string. The function will have a boolean output representing True if the user logs in correctly, and False if they do not. This is saved in the variable success.
+
+From the second line to the third line, I save the user information which is stored in a csv file as a variable called data. The open function takes two parameters. First, the csv file for the function to open, and second, the mode of what the function will do with the csv file. The mode 'r' tells the program to read the content of the csv file opened.
 ```.py
-def simple_login(user:str, password:str)->bool:
-    '''
-    Simple authentication, needs fle user.csv
-    :param user: string
-    :param password: string
-    :return: True/False if user is in database
-    '''
-    with open("user.csv") as file:
-        database = file.readlines()
-    output = False
-    for line in database:
-        line_cleaned = line.strip() #remove \n
-        user_pass = line_cleaned.split(",")
-        if user == user_pass[0] and password == user_pass[1]:
-            output = True
+def try_login(name: str, password: str) -> bool:
+    with open('users.csv', mode='r') as f:
+        data = f.readlines()
+
+    success = False
+    for line in data:
+        uname = line.split(',')[0]
+        upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
+
+        if uname == name and upass == password:
+            success = True
             break
 
-    return output
-
-
+    return success
 ```
