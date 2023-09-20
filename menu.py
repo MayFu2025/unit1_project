@@ -15,8 +15,12 @@ start_menu = f"""
 {"view description of DAI currency".title().ljust(50, '.')} type 3\n
 {"log out".title().ljust(50, '.')} type 4\n
 """
+
+
 def print_start():
     print(logo)
+
+
 def print_menu() -> int: #The int return number is each function/next menu
     print("Welcome to your wallet!".upper()) #TODO: Add color to this
     print(start_menu)
@@ -25,13 +29,18 @@ def print_menu() -> int: #The int return number is each function/next menu
         select = int(input("Error. Please choose a function by typing a number 1~4: "))
     return select
 
-if print_start() == 1:
+
+if print_menu() == 1:
+    pass
     # call function()
-elif print_start() == 2:
+elif print_menu() == 2:
+    pass
     # call function()
-elif print_start() == 3:
+elif print_menu() == 3:
+    pass
     # call function
-elif print_start() == 4:
+elif print_menu() == 4:
+    pass
     # call function
 else:
     print("Error. An unexpected error occured. Please try again.")

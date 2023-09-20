@@ -1,2 +1,5 @@
-initial, transaction, amount, final, date
-100, withdrawal, -10, 90, 2023/09/18
+initial, amount, final, date
+
+
+# if the user states the transaction is a withdrawal, automatically put a - sign in front of amount of transaction
+# when finding data of only withdrawals or only investments you can use a for loop for every data in 'amount' under 0 or over 0.
