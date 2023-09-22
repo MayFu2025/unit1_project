@@ -16,9 +16,15 @@ start_menu = f"""
 {"log out".title().ljust(50, '.')} type 4\n
 """
 
+ask_at_startup = f"""
+{'Already have an account? Log-in'.ljust(50, '.')} type 1\n
+{'New user? Sign-up'.ljust(50, '.')} type 2\n
+"""
 
 def print_start():
     print(logo)
+    print(ask_at_startup)
+
 
 
 def print_menu() -> int: #The int return number is each function/next menu
