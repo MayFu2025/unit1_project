@@ -14,6 +14,12 @@ def try_login(name: str, password: str) -> bool:
 
     return success
 
+def login_success() -> bool:
+    in_name = input("Enter your username: ")
+    in_pass = input("Enter your password: ")
+    success = try_login(in_name, in_pass)
+    return success
+
 # # test logging-in
 # attempts = 3
 #

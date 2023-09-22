@@ -1,4 +1,4 @@
-def try_login(name: str, password: str) -> bool:
+def try_login(name: str, password: str) -> bool: #importing function from log in starts the function before it is even called
     with open('users.csv', mode='r') as f:
         data = f.readlines()
 
@@ -13,6 +13,7 @@ def try_login(name: str, password: str) -> bool:
 
     return success
 
+# when I import any function from login it starts the create user function even when not called
 from menu import display_menu, validate_selection, logo
 startup = ['Already have an account? Log-in', 'New user? Sign-up']
 
@@ -30,4 +31,4 @@ if selection == 1: # User wants to log-in
         print("Wrong username or password. Try again.")
         in_name = input("Enter your username: ")
         in_pass = input("Enter your password: ")
-        try_login(in_name, in_pass)
+        success = try_login(in_name, in_pass)
