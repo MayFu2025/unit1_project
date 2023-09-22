@@ -2,20 +2,19 @@ from login import try_login, create_user
 from menu import print_start, print_menu
 from login import create_user
 
-selection = 0
-print_start()
-selection = input("Choose option by typing in the number of the menu: ")
+# print_start()
+input("Choose option by typing in the number of the menu: ")
 
-if selection == 1:
-    in_name = input("Enter your username: ")
-    in_pass = input("Enter your password: ")
-    result = try_login(name=in_name, password=in_pass)
-
-    while (result is False):
-        print("Username or Password is wrong. Try again.")
-        in_name = input("Enter your username: ")
-        in_pass = input("Enter your password: ")
-        result = try_login(name=in_name, password=in_pass)
+# if selection == 1:
+#     in_name = input("Enter your username: ")
+#     in_pass = input("Enter your password: ")
+#     result = try_login(name=in_name, password=in_pass)
+#
+#     while (result is False):
+#         print("Username or Password is wrong. Try again.")
+#         in_name = input("Enter your username: ")
+#         in_pass = input("Enter your password: ")
+#         result = try_login(name=in_name, password=in_pass)
 
 # End of log-in
 
