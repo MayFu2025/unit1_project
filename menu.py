@@ -35,13 +35,6 @@ def validate_selection(choices: list) -> int:
     return select
 
 
-# def select_user_menu():
-#     print(logo)
-#     print(ask_at_startup)
-#     select = int(input("Choose a function by typing a number 1~2: "))
-
-
-
 # def select_main_menu() -> int: #The int return number is each function/next menu
 #     print("Welcome to your wallet!".upper()) #TODO: Add color to this
 #     print(main_menu)

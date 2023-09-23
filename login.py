@@ -20,6 +20,18 @@ def login_success() -> bool:
     success = try_login(in_name, in_pass)
     return success
 
+
+def login_function() -> tuple:
+    in_name = input("Enter your username: ")
+    in_pass = input("Enter your password: ")
+    success = try_login(in_name, in_pass)
+    while success == False:
+        print("Wrong username or password. Try again.")
+        in_name = input("Enter your username: ")
+        in_pass = input("Enter your password: ")
+        success = try_login(in_name, in_pass)
+    return success, in_name
+
 # # test logging-in
 # attempts = 3
 #
@@ -69,8 +81,13 @@ def create_user():
         writer = csv.writer(users_list)
         writer.writerow([new_name, new_pass])
 
+
+
+
+
+
 # test creation of new user:
-create_user()
+# create_user()
 
 
 # # Log-in
