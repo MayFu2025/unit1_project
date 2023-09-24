@@ -80,6 +80,7 @@ def create_user():
     with open('users.csv', mode='a') as users_list:
         writer = csv.writer(users_list)
         writer.writerow([new_name, new_pass])
+    # TODO: if a user that has just created their account goes to the menu and pick stats, the user's own csv file does not yet exist until they input their first transaction. Would it be better to create it here?
 
 
 
