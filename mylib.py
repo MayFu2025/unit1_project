@@ -17,8 +17,8 @@ def validate_selection(choices: list) -> int:
     select = int(select)
     return select
 
-def try_login() -> bool:
-    '''Tests if user can successfully log in. Returns a boolean on success of log-in.'''
+def try_login() -> tuple:
+    '''Tests if user can successfully log in. Returns a tuple on bool: success of log-in, and str: user of current session.'''
     with open('users.csv', mode='r') as f:
         data = f.readlines()
     success = False
@@ -29,14 +29,15 @@ def try_login() -> bool:
     for line in data:
         uname = line.split(',')[0]
         upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
-        while uname != in_name and upass != in_pass:
-            print("Wrong username or password. Try again.")
-            in_name = input("Enter your username: ")
-            in_pass = input("Enter your password: ")
-        success = True
-    return success
+
+        if uname == in_name and upass == in_pass:
+            success = True
+            break
+
+    return success, uname
 
 def create_user():
+    '''Creates a new user and adds them to users.csv. Takes user input new_name and new_pass.'''
     with open('users.csv', mode='r') as users_list:
         users_database = users_list.readlines()
     new_name = input("Create a username: ")
@@ -60,5 +61,6 @@ def create_user():
     with open('users.csv', mode='a') as users_list:
         writer = csv.writer(users_list)
         writer.writerow([new_name, new_pass])
-    with open(f"{new_name}.csv", 'a') as user_data:
-        user_data.writelines(f"{datetime.date.today()},0\n")
+    with open(f"{new_name}.csv", mode='a') as user_data:
+        writer = csv.writer(user_data)
+        writer.writerow([datetime.date.today(), 0])

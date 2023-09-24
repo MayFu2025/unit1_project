@@ -53,9 +53,40 @@ ask_return = ["Return to Main Menu", "Save and Log-out"]
 #     selection = validate_selection(main_menu)
 #     back_to_menu = False
 
+# Log in or Create User
 display_menu(startup_menu)
 choice = validate_selection(startup_menu)
 if choice == 1:
-    try_login()
+    result = try_login()
+    login_success = result[0]
+    while login_success == False:
+        print("Error: Wrong username or password.")
+        result = try_login()
+        login_success = result[0]
+    user = result[1]
 if choice == 2:
     create_user()
+    result = try_login()
+    login_success = result[0]
+    while login_success == False:
+        print("Error: Wrong username or password.")
+        result = try_login()
+        login_success = result[0]
+    user = result[1]
+
+# Display main menu and pick function # TODO Can I use a while loop here to repeat the menu after a function should the user specify
+if login_success:
+    display_menu(main_menu)
+    choice = validate_selection(main_menu)
+# if choice == 1: # Create new transaction
+#     # Thing
+# if choice == 2: # View Past Transactions
+#     # Thing
+# if choice == 3: # View Description of DAI Currency
+#     # Thing
+if choice == 4: # Log-out
+    print("[Logging out...]")
+    print("Thank you for using wallet.")
+    exit(1)
+
+
