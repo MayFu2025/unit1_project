@@ -1,6 +1,0 @@
-initial, amount, final, date
-
-# initial is the amount of money prior to that specific transaction. Basically take the final of the last row.
-
-# if the user states the transaction is a withdrawal, automatically put a - sign in front of amount of transaction
-# when finding data of only withdrawals or only investments you can use a for loop for every data in 'amount' under 0 or over 0.

@@ -64,3 +64,30 @@ def create_user():
     with open(f"{new_name}.csv", mode='a') as user_data:
         writer = csv.writer(user_data)
         writer.writerow([datetime.date.today(), 0])
+
+def create_transaction(select: int, name: str):
+    action_date = datetime.date.today()
+    if select == 1:  # User Create Transaction
+        raw_dep = input("Enter amount of DAI you would like to deposit: ")
+        while not raw_dep.isdigit():
+            raw_dep = input("Error. Please enter as a numeric value how much DAI you would like to deposit: ")
+        action_value = float(raw_dep)
+    if select == 2:
+        raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
+        while not raw_wtd.isdigit():
+            raw_wtd = input("Error. Please enter as a numeric value how much DAI you would like to withdraw: ")
+        action_value = -(float(raw_wtd))
+    with open(f"{name}.csv", 'a') as user_data:
+        user_data.writelines(f"{action_date},{action_value}\n")
+
+
+# page_1 = f"""
+# User was created on: {data[0].split(',')[0]}
+# User's current balance: {total} DAI
+# In debt?: {debt_state}
+# Total amount deposited: {}DAI
+# Total amount withdrawn: {}DAI"""
+#
+# page_2 = f"""
+#
+# """
