@@ -107,7 +107,7 @@ def create_transaction(select: int, name: str, expense_categories: list):
 #
 # """
 
-def obtain_data(name: str, start_date: str, end_date: str):
+def obtain_data1(name: str, start_date: str, end_date: str):
     with open(f'{name}.csv', mode='r') as user_list:
         transaction_database = user_list.readlines()
     dates = []
@@ -126,17 +126,13 @@ def obtain_data(name: str, start_date: str, end_date: str):
     iEnd = -(reversed.index(end_date))-1
     profit = 0
     loss = 0
-    for i in range(iStart, iEnd-1):
-        print(transaction[i][1])
-        print(transaction[i][1])
+    for i in range(iStart, iEnd-1): #the for loop itself isn't working
         if transaction[i][0] == 'deposit':
             profit += transaction[i][1]
         else:
             loss += transaction[i][1]
-    print(profit)
-    print(loss)
 
-obtain_data('test', '2023-09-24', '2023-09-26')
+obtain_data1('test', '2023-09-24', '2023-09-26')
 
 
 # def past_month():
@@ -152,3 +148,57 @@ obtain_data('test', '2023-09-24', '2023-09-26')
 #     date = date.split(',')[0]
 #     dates.append(date)
 # iStart = dates.index('start_date')
+
+def obtain_data(name: str) -> list:
+    with open(f'{name}.csv', mode='r') as user_list:
+        transaction_database = user_list.readlines()
+    data = []
+    for item in transaction_database:
+        date, amount, category = item.strip().split(",")
+        data.append([date, amount, category])
+    return data
+
+# obtain_data('test')
+
+def month_statistics(data: list, month: int, year: int): #to validate month, use a list with numbers from 1 to 12
+    """Find the total profit and loss in a specified month of a specified month."""
+    profit = 0
+    loss = 0
+    for item in data:
+        if f"{year}-{month:02d}-" in str(item[0]):
+            if item[2] == 'deposit':
+                profit += float(item[1])
+            else:
+                loss += -(float(item[1]))
+    print(profit) #should be 20100
+    print(loss) #should be 55
+    return profit, loss
+
+def month_spending(data: list, month: int, year: int):
+    bills = 0
+    necessities = 0
+    transportation = 0
+    subscriptions = 0
+    other = 0
+    for item in data:
+        if f"{year}-{month:02d}-" in str(item[0]):
+            if item[2] == 'bills':
+                bills += float(item[1])
+            elif item[2] == 'necessities':
+                necessities += float(item[1])
+            elif item[2] == 'transportation':
+                transportation += float(item[1])
+            elif item[2] == 'subscriptions':
+                subscriptions += float(item[1])
+            elif item[2] == 'other':
+                other += float(item[1])
+    return bills, necessities, transportation, subscriptions, other
+
+month_statistics(data=obtain_data("test"), month=9, year=2023)
+bills, necessities, transportation, subscriptions, other = month_spending(data=obtain_data("test"), month=9, year=2023)
+print(bills, necessities, transportation, subscriptions, other)
+
+
+
+
+
