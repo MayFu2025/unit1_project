@@ -5,6 +5,7 @@ startup_menu = ['Already have an account? Log-in', 'New user? Sign-up']
 main_menu = ["Create New Transaction", "View Past Transactions", "View Description of DAI Currency", "Log-out"]
 ask_return = ["Return to Main Menu", "Save and Log-out"]
 transaction_menu = ["Create Deposit", "Create Withdrawal"]
+expense_categories = ["Bills", "Necessities", "Transportation", "Subscriptions", "Other"]
 
 # print(logo)
 # print("Welcome to your WALLET!") # TODO: Colors! Banners! Yay!
@@ -84,7 +85,7 @@ if login_success:
 if choice == 1: # Create new transaction
     display_menu(transaction_menu)
     choice_a = validate_selection(transaction_menu)
-    create_transaction(select=choice_a, name=user)
+    create_transaction(select=choice_a, name=user, expense_categories=expense_categories)
 
 if choice == 2: # View Past Transactions
     with open(f'{user}.csv', mode='r') as f:

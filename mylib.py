@@ -65,20 +65,35 @@ def create_user():
         writer = csv.writer(user_data)
         writer.writerow([datetime.date.today(), 0])
 
-def create_transaction(select: int, name: str):
+expense_categories = ["Bills", "Necessities", "Transportation", "Subscriptions", "Other"]
+def create_transaction(select: int, name: str, expense_categories: list):
     action_date = datetime.date.today()
     if select == 1:  # User Create Transaction
         raw_dep = input("Enter amount of DAI you would like to deposit: ")
         while not raw_dep.isdigit():
             raw_dep = input("Error. Please enter as a numeric value how much DAI you would like to deposit: ")
         action_value = float(raw_dep)
+        with open(f"{name}.csv", 'a') as user_data:
+            user_data.writelines(f"{action_date},{action_value},deposit\n")
     if select == 2:
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not raw_wtd.isdigit():
             raw_wtd = input("Error. Please enter as a numeric value how much DAI you would like to withdraw: ")
         action_value = -(float(raw_wtd))
-    with open(f"{name}.csv", 'a') as user_data:
-        user_data.writelines(f"{action_date},{action_value}\n")
+        display_menu(expense_categories)
+        category = validate_selection(expense_categories)
+        if category == 1:
+            category = "bills"
+        elif category == 2:
+            category = "necessities"
+        elif category == 3:
+            category = "transportation"
+        elif category == 4:
+            category = "subscriptions"
+        elif category == 5:
+            category = "other"
+        with open(f"{name}.csv", 'a') as user_data:
+            user_data.writelines(f"{action_date},{action_value},{category}\n")
 
 
 # page_1 = f"""
@@ -91,3 +106,49 @@ def create_transaction(select: int, name: str):
 # page_2 = f"""
 #
 # """
+
+def obtain_data(name: str, start_date: str, end_date: str):
+    with open(f'{name}.csv', mode='r') as user_list:
+        transaction_database = user_list.readlines()
+    dates = []
+    reversed = []
+    transaction = []
+    for item in transaction_database:
+        data = item.strip().split(',')
+        date = data[0]
+        dates.append(date)
+        reversed.append(date)
+        category = data[2]
+        amount = data[1]
+        transaction.append([category,amount])
+    reversed.reverse()
+    iStart = dates.index(start_date)
+    iEnd = -(reversed.index(end_date))-1
+    profit = 0
+    loss = 0
+    for i in range(iStart, iEnd-1):
+        print(transaction[i][1])
+        print(transaction[i][1])
+        if transaction[i][0] == 'deposit':
+            profit += transaction[i][1]
+        else:
+            loss += transaction[i][1]
+    print(profit)
+    print(loss)
+
+obtain_data('test', '2023-09-24', '2023-09-26')
+
+
+# def past_month():
+#
+
+# with open(f'test.csv', mode='r') as user_list:
+#     transaction_database = user_list.readlines()
+# print(transaction_database)
+# create_graph(name="test", start_date='2023-09-24', end_date='2023-09-26')
+# dates = []
+# for item in transaction_database:
+#     date = item.strip()
+#     date = date.split(',')[0]
+#     dates.append(date)
+# iStart = dates.index('start_date')

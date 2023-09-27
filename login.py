@@ -107,3 +107,14 @@ def create_user():
 #     attempts -= 1
 #
 # # End of log-in
+
+import datetime
+today = datetime.date.today()
+print(today)
+
+list1 = ["2023-06-01","2023-09-24", "2023-09-08", "2023-05-04"]
+year = int(input("Enter year: "))
+month = int(input("Enter month: "))
+for date in list1:
+    if f"{year}-{month:02d}-" in date:
+        print(date)
