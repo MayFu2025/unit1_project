@@ -51,6 +51,39 @@ I will be making the electronic wallet on PyCharm, and it will be run in the Ter
 | 2       | Create a login system | To have a flow diagram and the code for the login system                                 | 30 min        | Sep 14                 | B, C      |
 
 # Criteria C: Development
+## Create New User Option
+My client requires a log-in system (password protection) to keep their confidential data safe, and I thought of creating a way for users to create a unique username and password which they can use to log-in and obtain the same data for next use. Being able to host multiple users instead of just one on the application, would be beneficial if the client has family members, or would like to split her records between for example personal spendings, and expenses from their workplace.
+
+In the first line, I define the function create_user. It does not take any parameters.
+
+```.py
+with open('users.csv', mode='r') as users_list:
+    users_database = users_list.readlines()
+new_name = input("Create a username: ")
+if users_database:
+    validate = True
+    while validate == True:
+        for user in users_database:
+            if new_name in user:
+                new_name = input("Username already taken. Please enter another username: ")
+            else:
+                validate = False
+new_pass = input("Create a password: ")
+confirm_new_pass = input("Confirm new password: ")
+validate = True
+while validate == True:
+    if confirm_new_pass != new_pass:
+        new_pass = input("Passwords do not match. Create a password: ")
+        confirm_new_pass = input("Confirm new password: ")
+    else:
+        validate = False
+with open('users.csv', mode='a') as users_list:
+    writer = csv.writer(users_list)
+    writer.writerow([new_name, new_pass])
+with open(f"{new_name}.csv", mode='a') as user_data:
+    writer = csv.writer(user_data)
+    writer.writerow([datetime.date.today(), 0, "other"])
+```
 
 ## Login System
 My client requires a system to protect the private data. I thought about using a login system to accomplish this requirement using a if condition and the open command to work with a csv file.
