@@ -20,7 +20,6 @@ display_menu(startup_menu)
 choice = validate_selection(startup_menu)
 print(hr)
 if choice == 1:
-    print("[Log-in]")
     result = try_login()
     login_success = result[0]
     while not login_success:
@@ -29,11 +28,9 @@ if choice == 1:
         login_success = result[0]
     user = result[1]
 if choice == 2:
-    print("[Create New User]")
     create_user()
     print("New User Successfully Created. Please log-in.")
-    # TODO: You can supposedly create a user with the name ' ' and password ' ' and it will still work. You can't log into it though. Better to make it so that you can't create a user with a space in the name or password.
-    # TODO: Should probably make usernames only alphanumeric, and passwords only alphanumeric and symbols.
+    print(hr)
     result = try_login()
     login_success = result[0]
     while not login_success:
@@ -41,11 +38,11 @@ if choice == 2:
         result = try_login()
         login_success = result[0]
     user = result[1]
+print("[Successfully Logged-in]")
 
 while login_success:
     print(hr)
-    print("[Successfully Logged-in]")
-    print("Welcome to your WALLET!")
+    print("[Welcome to your WALLET!]")
     display_menu(main_menu)
     choice = validate_selection(main_menu)
 
@@ -54,8 +51,7 @@ while login_success:
         print("[Create New Transaction]")
         display_menu(transaction_menu)
         choice_a = validate_selection(transaction_menu)
-        # TODO: I kinda want like only one empty line here but hr gives me this huge ass space lol
-        # TODO: I got up to here for creating spacing yay
+        print(hr)
         create_transaction(select=choice_a, name=user, expense_categories=expense_categories)
 
     if choice == 2:  # View Past Transactions
@@ -123,10 +119,12 @@ while login_success:
         print("Thank you for using wallet.")
         exit(1)
 
-    print("[Return to Main Menu?]]")
+    print(hr)
+    print("[Return to Main Menu?]")
     display_menu(choices=ask_return)
     log_out = validate_selection([1, 2])
     if log_out == 2:
+        print(hr)
         print("[Logging out...]")
         print("Thank you for using wallet.")
         login_success = False

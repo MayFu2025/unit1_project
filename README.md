@@ -22,7 +22,7 @@ An example of the data stored is
 ## Proposed Solution
 
 Design statement:
-I will to design and make a digital ledger / electronic wallet for a client who is Ms. Sato as per the Problem definition. The ledger will be about depositing, withdrawing, and storing DAI, a type of cryptocurrency, and is constructed using the software PyCharm. It will take  approximately a month to make and will be evaluated according to the success criteria listed below.
+I will to design and make a digital ledger for a client who is Ms. Sato as per the Problem definition. The ledger will be about depositing, withdrawing, and storing DAI, a type of cryptocurrency, and is constructed using Python. It will take  approximately a month to make and will be evaluated according to the success criteria listed below.
 
 #** add a description of your coin and citation **
 
