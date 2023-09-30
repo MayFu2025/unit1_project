@@ -1,4 +1,5 @@
 import csv, datetime
+
 def display_menu(choices: list):
     '''Takes a list and prints a menu with each item of the list being a choice in the menu.'''
     menu = ''
@@ -18,6 +19,14 @@ def validate_selection(choices: list) -> int: #TODO: validate choices will resul
         select = input(f"Error. Please select a choice between 1~{expect}: ")
     select = int(select)
     return select
+
+def validate_float(user_input: str) -> bool:
+    '''Takes a str user input and checks if it is a float. Returns a boolean.'''
+    try:
+        float(user_input)
+        return True
+    except ValueError:
+        return False
 
 def try_login() -> tuple:
     '''Tests if user can successfully log in. Returns a tuple on bool: success of log-in, and str: user of current session.'''
@@ -69,47 +78,37 @@ def create_user():
 
 expense_categories = ["Bills", "Necessities", "Transportation", "Subscriptions", "Other"]
 def create_transaction(select: int, name: str, expense_categories: list):
+    '''Creates a transaction for the user. Takes user input select, name, and expense_categories.'''
     action_date = datetime.date.today()
     if select == 1:  # User Create Transaction
         raw_dep = input("Enter amount of DAI you would like to deposit: ")
-        while not raw_dep.isdigit():
-            raw_dep = input("Error. Please enter as a numeric value how much DAI you would like to deposit: ")
+        while not validate_float(raw_dep):
+            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = float(raw_dep)
         with open(f"{name}.csv", 'a') as user_data:
             user_data.writelines(f"{action_date},{action_value},deposit\n")
     if select == 2:
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
-        while not raw_wtd.isdigit():
-            raw_wtd = input("Error. Please enter as a numeric value how much DAI you would like to withdraw: ")
+        while not validate_float(raw_wtd):
+            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = -(float(raw_wtd))
         display_menu(expense_categories)
         category = validate_selection(expense_categories)
-        if category == 1:
-            category = "bills"
-        elif category == 2:
-            category = "necessities"
-        elif category == 3:
-            category = "transportation"
-        elif category == 4:
-            category = "subscriptions"
-        elif category == 5:
-            category = "other"
+        # if category == 1:
+        #     category = "bills"
+        # elif category == 2:
+        #     category = "necessities"
+        # elif category == 3:
+        #     category = "transportation"
+        # elif category == 4:
+        #     category = "subscriptions"
+        # elif category == 5:
+        #     category = "other"
         with open(f"{name}.csv", 'a') as user_data:
-            user_data.writelines(f"{action_date},{action_value},{category}\n")
-
-
-# page_1 = f"""
-# User was created on: {data[0].split(',')[0]}
-# User's current balance: {total} DAI
-# In debt?: {debt_state}
-# Total amount deposited: {}DAI
-# Total amount withdrawn: {}DAI"""
-#
-# page_2 = f"""
-#
-# """
+            user_data.writelines(f"{action_date},{action_value},{(expense_categories[category-1]).lower()}\n")
 
 def obtain_data1(name: str, start_date: str, end_date: str):
+    """My attempt at obtaining data in a csv file between a specified start date and specified end date. Chotto not working so it's unused. Obtains data from a csv file and returns a list of lists with each list containing the date, amount, and category of a transaction."""
     with open(f'{name}.csv', mode='r') as user_list:
         transaction_database = user_list.readlines()
     dates = []
@@ -152,6 +151,7 @@ obtain_data1('test', '2023-09-24', '2023-09-26')
 # iStart = dates.index('start_date')
 
 def obtain_data(name: str) -> list:
+    """Obtains data from a csv file and returns a list of lists with each list containing the date, amount, and category of a transaction."""
     with open(f'{name}.csv', mode='r') as user_list:
         transaction_database = user_list.readlines()
     data = []
@@ -163,7 +163,7 @@ def obtain_data(name: str) -> list:
 # obtain_data('test')
 
 def month_statistics(data: list, month: int, year: int): #to validate month, use a list with numbers from 1 to 12
-    """Find the total profit and loss in a specified month of a specified month."""
+    """Find the total profit and loss in a specified month of a specified year."""
     profit = 0
     loss = 0
     for item in data:
@@ -175,6 +175,7 @@ def month_statistics(data: list, month: int, year: int): #to validate month, use
     return [profit, loss]
 
 def month_spending(data: list, month: int, year: int)-> list:
+    """Find the total spending in each category in a specified month of a specified year."""
     bills = 0
     necessities = 0
     transportation = 0
@@ -200,6 +201,7 @@ def month_spending(data: list, month: int, year: int)-> list:
 
 # TODO: Find a suitable scale function?
 def create_bar(title: str, category: list, amounts: list, scale: int)-> str:
+    """Creates a bar chart with a title, categories, amounts, and a scale."""
     bar_chart = f"{title}\n"
     for i in range(len(category)): #TODO: the round function only rounds to nearest whole, is it possible to round to nearest multiple of scale?
         amount_bar = abs(amounts[i])//scale
