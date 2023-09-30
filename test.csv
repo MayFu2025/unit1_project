@@ -1,6 +1,9 @@
 2023-09-24,0,other
-2023-09-25,100,deposit
-2023-09-26,-50,other
-2023-09-26,-5,other
-2023-09-27,10000.0,deposit
-2023-09-27,10000.0,deposit
+2023-09-24,100,deposit
+2023-09-24,-70,bills
+2023-09-25,-32,subscriptions
+2023-09-26,-50,necessities
+2023-09-26,-217,other
+2023-09-27,350,deposit
+2023-09-27,100,deposit
+2023-09-27,-25,transportation

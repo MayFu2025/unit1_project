@@ -8,11 +8,13 @@ def display_menu(choices: list):
         count += 1
     print(menu)
 
-def validate_selection(choices: list) -> int:
+def validate_selection(choices: list) -> int: #TODO: validate choices will result in error if user inputs a alpha string
     '''Takes a list and a int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.'''
     expect = len(choices)
     select = input(f'Select a choice between 1~{expect}: ')
-    while not 0 < int(select) < expect+1: # TODO: Error when string inputted instead
+    while select.isdigit() == False:
+        select = input(f"Error. Please select a choice between 1~{expect}: ")
+    while not 0 < int(select) < expect+1:
         select = input(f"Error. Please select a choice between 1~{expect}: ")
     select = int(select)
     return select
@@ -63,7 +65,7 @@ def create_user():
         writer.writerow([new_name, new_pass])
     with open(f"{new_name}.csv", mode='a') as user_data:
         writer = csv.writer(user_data)
-        writer.writerow([datetime.date.today(), 0])
+        writer.writerow([datetime.date.today(), 0, "other"])
 
 expense_categories = ["Bills", "Necessities", "Transportation", "Subscriptions", "Other"]
 def create_transaction(select: int, name: str, expense_categories: list):
@@ -170,11 +172,9 @@ def month_statistics(data: list, month: int, year: int): #to validate month, use
                 profit += float(item[1])
             else:
                 loss += -(float(item[1]))
-    print(profit) #should be 20100
-    print(loss) #should be 55
-    return profit, loss
+    return [profit, loss]
 
-def month_spending(data: list, month: int, year: int):
+def month_spending(data: list, month: int, year: int)-> list:
     bills = 0
     necessities = 0
     transportation = 0
@@ -192,13 +192,34 @@ def month_spending(data: list, month: int, year: int):
                 subscriptions += float(item[1])
             elif item[2] == 'other':
                 other += float(item[1])
-    return bills, necessities, transportation, subscriptions, other
+    return [bills, necessities, transportation, subscriptions, other]
 
-month_statistics(data=obtain_data("test"), month=9, year=2023)
-bills, necessities, transportation, subscriptions, other = month_spending(data=obtain_data("test"), month=9, year=2023)
-print(bills, necessities, transportation, subscriptions, other)
+# month_statistics(data=obtain_data("test"), month=9, year=2023)
+# bills, necessities, transportation, subscriptions, other = month_spending(data=obtain_data("test"), month=9, year=2023)
+# print(bills, necessities, transportation, subscriptions, other)
 
+# TODO: Find a suitable scale function?
+def create_bar(title: str, category: list, amounts: list, scale: int)-> str:
+    bar_chart = f"{title}\n"
+    for i in range(len(category)): #TODO: the round function only rounds to nearest whole, is it possible to round to nearest multiple of scale?
+        amount_bar = abs(amounts[i])//scale
+        bar_category = f"{category[i].ljust(20)}"
+        for x in range(int(amount_bar)):
+            bar_category += '▥'
+        bar_chart += f"{bar_category} {abs(amounts[i])} DAI\n"
+    bar_chart += f"\nWhere each ▥ represents {scale} DAI"
+    return bar_chart
 
+# print(create_bar(category=["bills", "necessities", "transportation", "subscriptions", "other"], amounts=[1500, 2000, 3600, 4000, 5700], scale=1000))
 
+# deposits = 10000 // 100
+# withdraws = 10000 // 100
+# bar_deposits = "deposits".ljust(20)
+# for x in range(deposits):
+#     bar_deposits += '▥'
+# bar_withdraws = "withdraws".ljust(20)
+# for x in range(withdraws):
+#     bar_withdraws += '▥'
+# print(f"{bar_deposits} ${deposits * 100}\n{bar_withdraws} ${withdraws * 100}")
 
 
