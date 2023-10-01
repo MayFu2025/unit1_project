@@ -44,7 +44,7 @@ Success criteria 5 is relevant to the client's needs as in the problem definitio
 
 Success criteria 6 is relevant to the client's needs, as in the problem definition, it is stated that it is "difficult for Ms. Sato to find past transactions." Therefore, a feature that easily locates and display past transactions would be a useful feature for the client. Many people tend to finance their money by month, therefore I chose that the ledger should be able to display all transactions from a specified month in a specified year.
 
-Although a feature that can calculate the rate of Dai to the USD can be useful, it is not as important as other features due to the nature of Dai being soft-pegged to the value of USD. As the difference in the value of 1 Dai and $1 USD is at any time practically neglible, a calculation is barely ever required.
+Although a feature that can calculate the rate of Dai to the USD can be useful, it is not as important as other features due to the nature of Dai being soft-pegged to the value of USD. As the difference in the value of 1 Dai and $1 USD is at any time practically negligible, a calculation is barely ever required.
 
 
 # Criteria B: Design
@@ -56,10 +56,25 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 ![]()
 
 ## Record of Tasks
-| Task No | Planned Action        | Planned Outcome                                                                          | Time estimate | Target completion date | Criterion |
-|---------|-----------------------|------------------------------------------------------------------------------------------|---------------|------------------------|-----------|
-| 1       | Create system diagram | To have a clear idea of the hardware and software requirements for the proposed solution | 10 min        | Sep 13                 | B         |
-| 2       | Create a login system | To have a flow diagram and the code for the login system                                 | 30 min        | Sep 14                 | B, C      |
+| Task No | Planned Action                     | Planned Outcome                                                                                             | Time estimate (min) | Target completion date | Criterion |
+|---------|------------------------------------|-------------------------------------------------------------------------------------------------------------|---------------------|------------------------|-----------|
+| 1       | Create system diagram              | To have a clear idea of the hardware and software requirements for the proposed solution                    | 10                  | Sep 13                 | B         |
+| 2       | Create a login system              | To have a flow diagram and the code for the login system                                                    | 30                  | Sep 14                 | B, C      |
+| 3       | Finalize Success Criteria          | To have a finalized success criteria, where its relevance to the client's needs are justified               | 30                  | Sep 18                 | A         |
+| 4       | Create a display menu function     | To have a function that can display a menu of choices the user can make, given the choices                  | 10                  | Sep 22                 | C         |
+| 5       | Create a validate choice function  | To have a function that can validate user input of their selected choice in the menu                        | 10                  | Sep 22                 | C         |
+| 6       | Create a new user system           | To have a code that allows for new users to be created                                                      | 20                  | Sep 25                 | C         |
+| 7       | Create a new transaction function  | To have a function that allows for the user to record a new transaction in their own csv file               | 30                  | Sep 25                 | C         |
+| 8       | Display basic statistics           | To have a code that displays basic statistics such as total profit, loss, balance, debt                     | 20                  | Sep 25                 | C         |
+| 9       | Display currency description       | To have a code that displays the description of the cryptocurrency selected                                 | 5                   | Sep 27                 | C         |
+| 10      | Update new transaction function    | To allow for the user to sort any withdrawal (expenditure) transaction into a chosen category               | 20                  | Sep 27                 | C         |
+| 11      | Create a obtain data function      | To have a function that obtains transaction data from the user's csv file for use                           | 40                  | Sep 28                 | C         |
+| 12      | Create a display chart function    | To have a function that displays a basic bar graph of a specified category of data                          | 30                  | Sep 28                 | C         |
+| 13      | Create a loop for wallet functions | To make it so that the program does not exit, and can repeat functions specified by user until they log-out | 15                  | Sep 29                 | C         |
+| 14      | Receive peer feedback              | To have received peer feedback and identify issues/improvements that could be made                          | 70                  | Sep 29                 | B, C      |
+| 15      | Finalize code                      | Addressed all tasks identified in peer feedback session                                                     | 240                 | Sep 30                 | C         |
+| 15      | Repeat all tests                   | To have confirmed that the program passes all tests recorded in the Test Plan                               | 30                  | Oct 1                  | B         |
+| 16      | Write documentation                | To have flow diagrams of functions in the program, and have documented these in the README file             | 300                 | Oct 4                  | B, C      |
 
 ## Test Plan
 
