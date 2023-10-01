@@ -88,7 +88,7 @@ while login_success:
             print(
                 create_bar(title="Chart of Total Profit and Loss", category=["Profit", "Loss"], amounts=[profit, loss],
                            scale=100))
-            print(lr)
+            print(sr)
             display_menu(["Go to Next Page", "Exit"])
             page = validate_selection([1, 2])
             if page == 2:
@@ -108,14 +108,14 @@ while login_success:
                 month_selected = input("Choose a month to view data for: ")
                 month_selected = validate_month(user=user, year=year_selected, month=month_selected)
                 print(sr)
-                print(create_bar(title="Chart of Profit and Loss for Selected Month", category=["Profit", "Loss"],
+                print(create_bar(title=f"Chart of Profit and Loss for {year_selected}/{month_selected}", category=["Profit", "Loss"],
                                  amounts=month_statistics(data=obtain_data(user), year=int(year_selected), month=int(month_selected)),
                                  scale=100))
                 print(sr)
-                print(create_bar(title="Chart of Expense Categories for Selected Month", category=expense_categories,
+                print(create_bar(title=f"Chart of Expense Categories for {year_selected}/{month_selected}", category=expense_categories,
                                  amounts=month_spending(data=obtain_data(user), year=int(year_selected), month=int(month_selected)),
                                  scale=10))
-                print(lr)
+                print(sr)
                 display_menu(["Go to Previous Page", "Exit"])
                 page = validate_selection([1, 2])
             if page == 2:
