@@ -41,20 +41,15 @@ def validate_month(user: str, month: str, year: str) -> str:
     data = obtain_data(user)
     data_exists = False
     while not data_exists:
-        if not month.isnumeric():
-            print("Error. You have entered a non-numeric value.")
-            month = input("Choose a month to view data for: ")
-            pass
-        else:
+        if month.isnumeric():
             for item in data:
                 if f"{year}-" in item[0]:
                     if f"-{int(month):02d}-" in item[0]:
                         data_exists = True
                         break
-        if data_exists:
-            return month
-    else:
-        print("Error. The month you selected has no data.")
+            if data_exists:
+                return month
+        print("Error. The month you selected has no data, or you have entered a non-numeric value.")
         month = input("Choose a month to view data for: ")
 
 # def validate_selection(choices: list)-> int:
