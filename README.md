@@ -1,6 +1,6 @@
 # Crypto Wallet
 
-![](assets/Cryptocurrency by James Ward.gif)  
+![](assets/cryptocurrency.gif)  
 <sub>"Cryptocurrency" by James Ward, *https://dribbble.com/shots/4822394-Cryptocurrency*</sub>
 
 # Criteria A: Planning
