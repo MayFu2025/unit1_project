@@ -39,7 +39,7 @@ I will be making the electronic wallet on PyCharm, and it will be run in the Ter
 # Criteria B: Design
 
 ## System Diagram
-![](unit1_system_diagram.jpg)
+![](assets/unit1_system_diagram.jpg)
 *fig.1* System diagram of proposed solution
 ## Flow Diagrams
 
