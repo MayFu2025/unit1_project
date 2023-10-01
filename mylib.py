@@ -1,5 +1,4 @@
 import csv, datetime
-from stylize import ascii_colors, lr, sr
 
 
 def display_menu(choices: list):
@@ -234,3 +233,46 @@ def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
         bar_chart += f"{bar_category} {abs(amounts[i])} DAI\n"
     bar_chart += f"Where each ▥ represents {scale} DAI"
     return bar_chart
+
+
+# Stylization Tools #
+logo = """
+ __     __     ______     __         __         ______     ______  
+/\ \  _ \ \   /\  __ \   /\ \       /\ \       /\  ___\   /\__  _\ 
+\ \ \/ ".\ \  \ \  __ \  \ \ \____  \ \ \____  \ \  __\   \/_/\ \/ 
+ \ \__/".~\_\  \ \_\ \_\  \ \_____\  \ \_____\  \ \_____\    \ \_\ 
+  \/_/   \/_/   \/_/\/_/   \/_____/   \/_____/   \/_____/     \/_/ 
+
+"""
+
+ascii_colors = {
+    "reset": "\033[0m",
+    "bold": "\033[1m",
+    "dim": "\033[2m",
+    "italic": "\033[3m",
+    "underline": "\033[4m",
+    "blink": "\033[5m",
+    "reverse": "\033[7m",
+    "hidden": "\033[8m",
+
+    "black": "\033[30m",
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "yellow": "\033[33m",
+    "blue": "\033[34m",
+    "magenta": "\033[35m",
+    "cyan": "\033[36m",
+    "white": "\033[37m",
+
+    "bg_black": "\033[40m",
+    "bg_red": "\033[41m",
+    "bg_green": "\033[42m",
+    "bg_yellow": "\033[43m",
+    "bg_blue": "\033[44m",
+    "bg_magenta": "\033[45m",
+    "bg_cyan": "\033[46m",
+    "bg_white": "\033[47m"
+}
+
+lr = "\n"
+sr = ""

@@ -1,9 +1,7 @@
 import os
 import csv, datetime
 from textwrap import wrap
-
-from stylize import logo, ascii_colors, lr, sr
-from mylib import display_menu, validate_selection, try_login, create_user, create_transaction, month_spending, month_statistics, obtain_data, create_bar
+from mylib import display_menu, validate_selection, try_login, create_user, create_transaction, month_spending, month_statistics, obtain_data, create_bar, logo, ascii_colors, lr, sr
 
 startup_menu = ['Already have an account? Log-in', 'New user? Sign-up']
 main_menu = ["Create New Transaction", "View Past Transactions", "View Description of DAI Currency", "Log-out"]
