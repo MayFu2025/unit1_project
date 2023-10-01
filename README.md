@@ -1,7 +1,7 @@
 # Crypto Wallet
 
-![](22ROOSE-master768.gif)  
-<sub>Illustration for Glenn Harvey</sub>
+![](assets/Cryptocurrency by James Ward.gif)  
+<sub>"Cryptocurrency" by James Ward, *https://dribbble.com/shots/4822394-Cryptocurrency*</sub>
 
 # Criteria A: Planning
 
