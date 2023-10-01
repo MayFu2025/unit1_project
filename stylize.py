@@ -36,4 +36,5 @@ ascii_colors = {
     "bg_white": "\033[47m"
 }
 
-hr = "\n"
+lr = "\n"
+sr = ""

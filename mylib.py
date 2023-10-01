@@ -1,4 +1,5 @@
 import csv, datetime
+from stylize import ascii_colors, lr, sr
 
 
 def display_menu(choices: list):
@@ -104,10 +105,7 @@ def create_user():
         writer.writerow([datetime.date.today(), 0, "other"])
 
 
-expense_categories = ["Bills", "Necessities", "Transportation", "Subscriptions", "Other"]
-
-
-def create_transaction(select: int, name: str, expense_categories: list):
+def create_transaction(select: int, name: str, categories: list):
     '''Creates a transaction for the user. Takes user input select, name, and expense_categories.'''
     action_date = datetime.date.today()
     if select == 1:  # User Create Transaction
@@ -123,9 +121,10 @@ def create_transaction(select: int, name: str, expense_categories: list):
         while not validate_float(raw_wtd):
             raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = -(float(raw_wtd))
+        print(sr)
         print("Select a Category for your Withdrawal:")
-        display_menu(expense_categories)
-        category = expense_categories[validate_selection(expense_categories)-1].lower()
+        display_menu(categories)
+        category = categories[validate_selection(categories)-1].lower()
 
     with open(f"{name}.csv", 'a') as user_data:
         user_data.writelines(f"{action_date},{action_value},{category}\n")
@@ -187,8 +186,6 @@ def obtain_data(name: str) -> list:
     return data
 
 
-# obtain_data('test')
-
 def month_statistics(data: list, month: int, year: int):  # to validate month, use a list with numbers from 1 to 12
     """Find the total profit and loss in a specified month of a specified year."""
     profit = 0
@@ -224,10 +221,6 @@ def month_spending(data: list, month: int, year: int) -> list:
     return [bills, necessities, transportation, subscriptions, other]
 
 
-# month_statistics(data=obtain_data("test"), month=9, year=2023)
-# bills, necessities, transportation, subscriptions, other = month_spending(data=obtain_data("test"), month=9, year=2023)
-# print(bills, necessities, transportation, subscriptions, other)
-
 # TODO: Find a suitable scale function?
 def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
     """Creates a bar chart with a title, categories, amounts, and a scale."""
@@ -239,17 +232,5 @@ def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
         for x in range(int(amount_bar)):
             bar_category += '▥'
         bar_chart += f"{bar_category} {abs(amounts[i])} DAI\n"
-    bar_chart += f"\nWhere each ▥ represents {scale} DAI"
+    bar_chart += f"Where each ▥ represents {scale} DAI"
     return bar_chart
-
-# print(create_bar(category=["bills", "necessities", "transportation", "subscriptions", "other"], amounts=[1500, 2000, 3600, 4000, 5700], scale=1000))
-
-# deposits = 10000 // 100
-# withdraws = 10000 // 100
-# bar_deposits = "deposits".ljust(20)
-# for x in range(deposits):
-#     bar_deposits += '▥'
-# bar_withdraws = "withdraws".ljust(20)
-# for x in range(withdraws):
-#     bar_withdraws += '▥'
-# print(f"{bar_deposits} ${deposits * 100}\n{bar_withdraws} ${withdraws * 100}")
