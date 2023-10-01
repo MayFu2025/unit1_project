@@ -1,4 +1,4 @@
-import csv, datetime
+import csv, datetime, maskpass
 
 
 def display_menu(choices: list):
@@ -25,6 +25,37 @@ def validate_selection(choices: list) -> int:
     select = int(select)
     return select
 
+def validate_year(user: str, year: str)-> str:
+    data = obtain_data(user)
+    earliest_year = data[0][0].split('-')[0]
+    latest_year = data[-1][0].split('-')[0]
+    while True:
+        if year.isnumeric() and int(earliest_year) <= int(year) <= int(latest_year):
+            break
+        else:
+            print("Error. The year selected you selected has no data, or you have entered a non-numeric value.")
+            year = input(f"Choose a year to view data for: ")
+    return year
+
+def validate_month(user: str, month: str, year: str) -> str:
+    data = obtain_data(user)
+    data_exists = False
+    while not data_exists:
+        if not month.isnumeric():
+            print("Error. You have entered a non-numeric value.")
+            month = input("Choose a month to view data for: ")
+            pass
+        else:
+            for item in data:
+                if f"{year}-" in item[0]:
+                    if f"-{int(month):02d}-" in item[0]:
+                        data_exists = True
+                        break
+        if data_exists:
+            return month
+    else:
+        print("Error. The month you selected has no data.")
+        month = input("Choose a month to view data for: ")
 
 # def validate_selection(choices: list)-> int:
 #     '''Takes a list and a int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.'''
