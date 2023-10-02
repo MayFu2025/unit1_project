@@ -156,50 +156,6 @@ def create_transaction(select: int, name: str, categories: list):
     print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
 
 
-def obtain_data1(name: str, start_date: str, end_date: str):
-    """My attempt at obtaining data in a csv file between a specified start date and specified end date. Chotto not working so it's unused. Obtains data from a csv file and returns a list of lists with each list containing the date, amount, and category of a transaction."""
-    with open(f'{name}.csv', mode='r') as user_list:
-        transaction_database = user_list.readlines()
-    dates = []
-    reversed = []
-    transaction = []
-    for item in transaction_database:
-        data = item.strip().split(',')
-        date = data[0]
-        dates.append(date)
-        reversed.append(date)
-        category = data[2]
-        amount = data[1]
-        transaction.append([category, amount])
-    reversed.reverse()
-    iStart = dates.index(start_date)
-    iEnd = -(reversed.index(end_date)) - 1
-    profit = 0
-    loss = 0
-    for i in range(iStart, iEnd - 1):  # the for loop itself isn't working
-        if transaction[i][0] == 'deposit':
-            profit += transaction[i][1]
-        else:
-            loss += transaction[i][1]
-
-
-obtain_data1('test', '2023-09-24', '2023-09-26')
-
-
-# def past_month():
-#
-
-# with open(f'user.csv', mode='r') as user_list:
-#     transaction_database = user_list.readlines()
-# print(transaction_database)
-# create_graph(name="test", start_date='2023-09-24', end_date='2023-09-26')
-# dates = []
-# for item in transaction_database:
-#     date = item.strip()
-#     date = date.split(',')[0]
-#     dates.append(date)
-# iStart = dates.index('start_date')
-
 def obtain_data(name: str) -> list:
     """Obtains data from a csv file and returns a list of lists with each list containing the date, amount, and category of a transaction."""
     with open(f'{name}.csv', mode='r') as user_list:
@@ -209,6 +165,15 @@ def obtain_data(name: str) -> list:
         date, amount, category = item.strip().split(",")
         data.append([date, amount, category])
     return data
+
+
+def find_scale(data: list) -> int:
+    data.sort()
+    smallest = abs(data[0])
+    multiple = 1
+    while smallest//multiple > 10:
+        multiple *= 10
+    return multiple
 
 
 def month_statistics(data: list, month: int, year: int):  # to validate month, use a list with numbers from 1 to 12
@@ -243,10 +208,9 @@ def month_spending(data: list, month: int, year: int) -> list:
                 subscriptions += float(item[1])
             elif item[2] == 'other':
                 other += float(item[1])
-    return [bills, necessities, transportation, subscriptions, other]
+    return [-bills, -necessities, -transportation, -subscriptions, -other]
 
 
-# TODO: Find a suitable scale function?
 def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
     """Creates a bar chart with a title, categories, amounts, and a scale."""
     bar_chart = f"{title}\n"

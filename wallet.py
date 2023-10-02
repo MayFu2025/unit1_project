@@ -1,4 +1,4 @@
-from mylib import display_menu, validate_selection, try_login, create_user, create_transaction, month_spending, month_statistics, obtain_data, create_bar, logo, ascii_colors, lr, sr, validate_month, validate_year
+from mylib import display_menu, validate_selection, try_login, create_user, create_transaction, month_spending, month_statistics, obtain_data, create_bar, logo, ascii_colors, lr, sr, validate_month, validate_year, find_scale
 
 startup_menu = ['Already have an account? Log-in', 'New user? Sign-up']
 main_menu = ["Create New Transaction", "View Past Transactions", "View User Statistics", "View Description of DAI Currency", "Log-out"]
@@ -55,9 +55,17 @@ while login_success:
     if choice == 2:  # View Past Transactions
         print(lr)
         print("[View Past Transactions]")
-
+        year_selected = input("Choose a year to view data for: ")
+        year_selected = validate_year(user=user, year=year_selected)
+        month_selected = input("Choose a month to view data for: ")
+        print(sr)
+        month_selected = validate_month(user=user, year=year_selected, month=month_selected)
         data = obtain_data(user)
-        # for transaction in data:
+        transactions_in_month = f"[All Transactions from {year_selected}/{month_selected}]\n"
+        for item in data: #TODO looks bad cause of list format
+            if f"{year_selected}-{int(month_selected):02d}-" in str(item[0]):
+                transactions_in_month += f"{item}\n"
+        print(transactions_in_month)
 
 
     if choice == 3:  # View User Statistics
@@ -87,7 +95,7 @@ while login_success:
                 f"Total profit since creation of account: {profit}DAI\nTotal loss since creation of account: {-loss}DAI\nProfit to Loss Ratio: {round(profit / -loss, 2)}\n")
             print(
                 create_bar(title="Chart of Total Profit and Loss", category=["Profit", "Loss"], amounts=[profit, loss],
-                           scale=100))
+                           scale=find_scale([profit, -loss])))
             print(sr)
             display_menu(["Go to Next Page", "Exit"])
             page = validate_selection([1, 2])
@@ -99,22 +107,16 @@ while login_success:
                 validate = True
                 year_selected = input("Choose a year to view data for: ")
                 year_selected = validate_year(user=user, year=year_selected)
-                # while validate:
-                #     if year_selected.isnumeric():
-                #         year_selected = int(year_selected)
-                #         validate = False
-                #     else:
-                #         year_selected = input("Error. Please choose a year to view data for: ")
                 month_selected = input("Choose a month to view data for: ")
                 month_selected = validate_month(user=user, year=year_selected, month=month_selected)
                 print(sr)
-                print(create_bar(title=f"Chart of Profit and Loss for {year_selected}/{month_selected}", category=["Profit", "Loss"],
-                                 amounts=month_statistics(data=obtain_data(user), year=int(year_selected), month=int(month_selected)),
-                                 scale=100))
+                month_data = obtain_data(user)
+                amounts1 = month_statistics(data=month_data, year=int(year_selected), month=int(month_selected))
+                amounts2 = month_spending(data=month_data, year=int(year_selected), month=int(month_selected))
+                print(create_bar(title=f"Chart of Profit and Loss for {year_selected}/{month_selected}", category=["Profit", "Loss"], amounts=amounts1, scale=find_scale(data= amounts1)))
                 print(sr)
                 print(create_bar(title=f"Chart of Expense Categories for {year_selected}/{month_selected}", category=expense_categories,
-                                 amounts=month_spending(data=obtain_data(user), year=int(year_selected), month=int(month_selected)),
-                                 scale=10))
+                                 amounts=amounts2, scale=find_scale(data=amounts2)))
                 print(sr)
                 display_menu(["Go to Previous Page", "Exit"])
                 page = validate_selection([1, 2])
