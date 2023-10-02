@@ -61,7 +61,7 @@ while login_success:
         print(sr)
         month_selected = validate_month(user=user, year=year_selected, month=month_selected)
         data = obtain_data(user)
-        transactions_in_month = f"[All Transactions from {year_selected}/{month_selected}]\n"
+        transactions_in_month = f"[All Transactions from {year_selected}/{month_selected}]\n[Date, Amount, Category]\n"
         for item in data: #TODO looks bad cause of list format
             if f"{year_selected}-{int(month_selected):02d}-" in str(item[0]):
                 transactions_in_month += f"{item}\n"
