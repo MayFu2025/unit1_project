@@ -18,7 +18,7 @@ An example of the data stored is
 | Sep 24 2022 | food for house celebration | Food | 0.000001 BTC |
 
 ## Proposed Solution
-I will design and make a digital ledger for Ms. Sato, a client who is in need of a way to track her cryptocurrency transactions. The digital ledger will be about storing data of transactions and generating/displaying statistics, and is constructed using the software Python in the IDE PyCharm. It will take approximately a month to make and will be evaluated according to the success criteria listed below.
+I will design and make a digital ledger for Ms. Sato, a client who is in need of a way to track her cryptocurrency transactions. The digital ledger will be about storing data of transactions and generating/displaying statistics, and is constructed using the software Python in the IDE PyCharm. It will take approximately a month to complete and will be evaluated according to the success criteria listed below.
 
 The client has allowed the developer to select a type of cryptocurrency to focus on. Therefore, I picked the currency Dai.
 
@@ -27,9 +27,9 @@ Dai is a cryptocurrency operated by MakerDAO, created in December 2017. Dai aims
 I will be making the digital ledger using Python. First, the readability of Python's due to its simple syntax makes maintenance and updates to the ledger easy, and minimal-cost. The reusability of code in Python would make the creation of new, but similar or improved functions efficient. Secondly, Python’s support of modules, packages, and libraries help simplify complicated functions that can be useful in achieving a desirable ledger for the client. Some examples include datetime to record the date of transactions, csv to store these transactions in a database, pandas to analyze data, and maskpass to hide password inputs in the terminal. (“What is Python? Executive Summary”, python.org, https://www.python.org/doc/essays/blurb/)
 
 ## Success Criteria
-1. The electronic ledger is a text-based software (Runs in the Terminal). (Pre-determined success criteria)
-2. The electronic ledger display the basic description of the cyrptocurrency selected. (Pre-determined success criteria)
-3. The electronic ledger allows to enter, withdraw and record transactions. (Pre-determined success criteria)
+1. The electronic ledger is a text-based software (Runs in the Terminal).
+2. The electronic ledger display the basic description of the cyrptocurrency selected. 
+3. The electronic ledger allows to enter, withdraw and record transactions.
 4. The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance.
 5. The electronic ledger organizes transactions based on categories such as "Expenses," "Food," "Clothes," etc.
 6. The electronic ledger can display all transactions made in a specified month of a specified year.
@@ -73,7 +73,6 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 | 14      | Receive peer feedback              | To have received peer feedback and identify issues/improvements that could be made                          | 70                  | Sep 29                 | B, C      |
 | 15      | Finalize code                      | Addressed all tasks identified in peer feedback session                                                     | 240                 | Sep 30                 | C         |
 | 15      | Repeat all tests                   | To have confirmed that the program passes all tests recorded in the Test Plan                               | 30                  | Oct 1                  | B         |
-| 16      | Write documentation                | To have flow diagrams of functions in the program, and have documented these in the README file             | 300                 | Oct 4                  | B, C      |
 
 ## Test Plan
 | Test Type | Test Content                                       | Input                                                                                                                             | Expected Output                                                                                                                                                                                                                  | Complete? |
@@ -136,7 +135,7 @@ def validate_selection(choices: list) -> int:
 In the first line, I define the function validate_selection, which takes the parameter choices which is a list, and returns an integer, In the next line, I create a variable expect, which represents the range of numbers the program is expecting from the user. In this case, it is the length of the list of choices, and hence the program expects the user to choose an option between the first option in the list and the last option in the list. In the next line, I create a variable select, which stores the user's input to a prompt asking them for the number corresponding to the choice they would like to make (as per the displayed menu's format). The program then checks using a while loop if select is a numeric value, or if the integer value of select is within the expected values. While either is False, the program will keep prompting the user's input for a numeric choice between the expected options and newly storing it as select until both conditions turn True. Once the if statement is True, it will go to the else statement, which prompts the for loop to break. Select is then converted into an integer before being returned from the function.
 
 ## Create New User Function
-While not in the success criteria, I believed that it would be beneficial for the client if they can create multiple accounts: this way, they could share with the product their family members, or finance their personal and work expenditures separately. I thought of doing this by using csv files, while loops, and if statements.
+It would be beneficial for the client if they can create multiple accounts: this way, they could share with the product their family members, or finance their personal and work expenditures separately. I created this function by using csv files, while loops, and if statements.
 ```.py
 print("[Create New User]")
 with open('users.csv', mode='r') as users_list:
@@ -179,7 +178,7 @@ In the next section, the user creates a new password. First, the user is prompte
 Now that all of the required information is provided, I use the csv module again to add this information into the database. Using the open function I open the file users.csv again. mode='a' states that the program can now append to the file (now called as users_list). The function csv.writer() states that the program will now write onto users_list, and writer.writerow() writes the variable new_name and new_pass two comma separated values in a row of the file. Using the same method, I then open a csv file new_name.csv in the same mode='a' as user_data. As this is a new user, for the first time, the function creates a new csv file of the name specified. As I want to use this csv file to store the user's transaction data, I write a row on the file containing today's date (datetime.date.today() from the datetime module returns today's date in the format year-month-day), 0 (the amount of DAI the user has), and "other". Once this is done, a message is printed to let the user know that the program has recorded them as a new user, and that the process is finished.
 
 ## Logging-in to the Wallet
-Once a user is created, it should be required to log-in to their account, for privacy and security. Therefore I made a function to check if a user can log-in to their wallet, using the csv module, for loops, and if statements. 
+Once a user is created, it should be required to log-in to their account for better privacy and security. Therefore I made a function to check if a user can log-in to their wallet, using the csv module, for loops, and if statements. 
 ```.py
 def try_login() -> tuple:
     """Takes user input for username and password, and checks if the username and password is in one line in users.csv. Returns a tuple containing a bool and a str.
@@ -208,8 +207,8 @@ def try_login() -> tuple:
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
 Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, that means the user inputted username is the same as that being looped, and the password corresponding to that username has been correctly inputted. Therefore, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until it either finds an existing username that is the same as the user inputted username and its password is equal to that of the user inputted password, or it finishes looping through every existing user. The function finally returns success and the uname (which will be the user of the current session) as a tuple.
 
-## Creating a New Transaction (NOTE TO SELF REMEMBER THIS IS ALSO SUCCESS CRITERIA 55555555)
-As per success criteria 3: The electronic ledger allows to enter, withdraw and record transactions, I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and 
+## Creating a New Transaction ((Success Criteria 3 & 5)
+The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and 
 
 ```.py
 def create_transaction(select: int, name: str, categories: list):
@@ -245,13 +244,13 @@ def create_transaction(select: int, name: str, categories: list):
     print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
 ```
 
-## Displaying Past Transactions
+## Displaying Past Transactions (Success Criteria 6)
 As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period.
 
-## Showing User Statistics
+## Showing User Statistics (Success Criteria 4)
 As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user.
 
-## Displaying a description of the cyrptocurrency
+## Displaying a description of the cyrptocurrency (Success Criteria 2)
 As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
 ```.py
 
