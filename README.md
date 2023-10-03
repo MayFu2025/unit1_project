@@ -173,8 +173,41 @@ with open(f"{new_name}.csv", mode='a') as user_data:
 print("New User Successfully Created. Please log-in.")
 ```
 In the first line, I print a header to let the user know that they will be creating a new user. In the next line, I use the open function from the csv module to open the file users.csv. mode='r' states that the program will only be reading the contents of the file. The csv is represented as users_list. Next, a variable users_database is created, which is a list where each item is each line of the csv file as a string. The program then prompts the user to create a username, and stores it in the variable new_name. Then, the program checks using a while loop that new_name is alphanumeric. While new_name is not alphanumeric, the program will keep prompting the user to create a new alphanumeric username and store it as new_name. When new_name is alphanumeric, the while loop finishes and the program moves on to the next line. In the next line, using an if statement, the program checks if users_database is empty. This is important as I wanted to use a while loop to loop through each line in users_databse. However, if users_database is empty, it is not possible for the program to loop through no items, therefore it will create an error. Having nothing in users_database means that there are no previous users, therefore there is also no need for the program to check if the user's newly created username new_name is already taken by another user. Should users_database be empty, the program skips the entire if statement. However, if users_database is not empty, it will run the contents of the if statement. In the if statement, a boolean variable validate is set as True. Next, I created a while loop for while validate is True. While validate, a for loop loops between each line (user) in users_database. It then checks using an if statement if new_name is in user. If True, it means that the newly created username already exists, therefore the program will prompt the user to create a new username and stores it as new_name. If False, the username is not taken, therefore validate is switched to False and the for loop ends.
+
 In the next section, the user creates a new password. First, the user is prompted to create a new password which is stored as a new variable new_pass. Then, using a while loop, the program checks if new_pass is alphanumeric. While new_pass is not alphanumeric, the program will keep asking for an alphanumeric password and stores it in new_pass. When new_pass is alphanumeric, the for loop ends. Next, the user is asked to confirm their new password. Their input is stored as the variable confirm_new_pass. In a while True loop, I used an if statement to check if new_pass is the same as confirm_new_pass. If False, the program asks again for a new password, storing it in new_pass, and another confirmation, storing it in confirm_new_pass. The while loop will keep doing this process until new_pass is equal to confirm_new_pass and the if statement outputs True. If True, the loop is broken, as per the else statement.
+
 Now that all of the required information is provided, I use the csv module again to add this information into the database. Using the open function I open the file users.csv again. mode='a' states that the program can now append to the file (now called as users_list). The function csv.writer() states that the program will now write onto users_list, and writer.writerow() writes the variable new_name and new_pass two comma separated values in a row of the file. Using the same method, I then open a csv file new_name.csv in the same mode='a' as user_data. As this is a new user, for the first time, the function creates a new csv file of the name specified. As I want to use this csv file to store the user's transaction data, I write a row on the file containing today's date (datetime.date.today() from the datetime module returns today's date in the format year-month-day), 0 (the amount of DAI the user has), and "other". Once this is done, a message is printed to let the user know that the program has recorded them as a new user, and that the process is finished.
+
+## Logging-in to the Wallet
+Once a user is created, it should be required to log-in to their account, for privacy and security. Therefore I made a function to check if a user can log-in to their wallet, using the csv module, for loops, and if statements. 
+```.py
+def try_login() -> tuple:
+    """Takes user input for username and password, and checks if the username and password is in one line in users.csv. Returns a tuple containing a bool and a str.
+    :return: tuple
+        A tuple containing a bool and a str. The bool is True if the username and password exist together, and False if the username and password do not match existing data. The str is the username of the user.
+    """
+
+    print("[Log-in]")
+    with open('users.csv', mode='r') as f:
+        data = f.readlines()
+    success = False
+
+    in_name = input("Enter your username: ")
+    in_pass = input("Enter your password: ")
+
+    for line in data:
+        uname = line.split(',')[0]
+        upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
+
+        if uname == in_name and upass == in_pass:
+            success = True
+            break
+
+    return success, uname
+```
+In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
+Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, that means the user inputted username is the same as that being looped, and the password corresponding to that username has been correctly inputted. Therefore, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until it either finds an existing username that is the same as the user inputted username and its password is equal to that of the user inputted password, or it finishes looping through every existing user. The function finally returns success and the uname (which will be the user of the current session) as a tuple.
+
 
 ## Displaying a description of the cyrptocurrency
 As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
