@@ -175,7 +175,7 @@ In the next section, the user creates a new password. First, the user creates a 
 Now all of the required information is provided. I use the csv module again to add this information into the database. Using the open function I open the file users.csv. mode='a' states that the program can append to the file. The function csv.writer() states that the program will now write onto users_list, and writer.writerow() writes the variable new_name and new_pass two comma separated values in a row of the file. Using the same method, I then open a csv file new_name.csv in the same mode='a' as user_data. The program writes a row on the file containing today's date taken from the datetime module, 0 (the amount of DAI the user has), and "other". Finally, a message is printed to present that the program has recorded them as a new user.
 
 ## Logging-in to the Wallet
-Once a user is created, it should be required to log-in to their account for better privacy and security. Therefore I made a function to check if a user can log-in to their wallet, using the csv module, for loops, and if statements. 
+To provide the client with privacy and security, a user should log-in to use the ledger. A function to check if a user has successfully logged-in is suitable for this goal. To create this, I used the csv module, for loops, and if statements. 
 ```.py
 def try_login() -> tuple:
     """Takes user input for username and password, and checks if the username and password is in one line in users.csv. Returns a tuple containing a bool and a str.
@@ -204,8 +204,8 @@ def try_login() -> tuple:
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
 Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, that means the user inputted username is the same as that being looped, and the password corresponding to that username has been correctly inputted. Therefore, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until it either finds an existing username that is the same as the user inputted username and its password is equal to that of the user inputted password, or it finishes looping through every existing user. The function finally returns success and the uname (which will be the user of the current session) as a tuple.
 
-## Creating a New Transaction ((Success Criteria 3 & 5)
-The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and 
+## Creating a New Transaction (Success Criteria 3 & 5)
+The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and while loops.
 
 ```.py
 def create_transaction(select: int, name: str, categories: list):
@@ -230,7 +230,7 @@ def create_transaction(select: int, name: str, categories: list):
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not validate_float(raw_wtd):
             raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
-        action_value = -(float(raw_wtd))
+        action_value = float(raw_wtd)
         print(sr)
         print("Select a Category for your Withdrawal:")
         display_menu(categories)
