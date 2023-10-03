@@ -195,18 +195,36 @@ def try_login() -> tuple:
         uname = line.split(',')[0]
         upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
 
-        if uname == in_name and upass == in_pass:
+        if uname == in_name and upass == in_pass:  # user input matches an existing username and corresponding password
             success = True
             break
 
-    return success, uname
+    return success, uname  #uname of current session user
 ```
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
-Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, that means the user inputted username is the same as that being looped, and the password corresponding to that username has been correctly inputted. Therefore, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until it either finds an existing username that is the same as the user inputted username and its password is equal to that of the user inputted password, or it finishes looping through every existing user. The function finally returns success and the uname (which will be the user of the current session) as a tuple.
+Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until the if statement is True, or it loops through every pre-existing user. In the last line, the function finally returns success and the uname as a tuple.
+
+## Validating a Float
+As DAI is a currency osft-pegged to the USD which is precise to 2 decimal places, the client should be able to input deposit and withdrawal values to at least 2 decimal places. As a way to check if a value is a float does not exist, I defined a function that will do this for me using exception handling.
+```.py
+def validate_float(user_input: str) -> bool:
+    """Takes a str user input and checks if it is a valid float. Returns a bool.
+    :param user_input: str
+        The user input to be validated
+    :return: bool
+        True if user input is a valid float, False if user input is not a valid float
+    """
+
+    try:
+        float(user_input)
+        return True
+    except ValueError:
+        return False
+```
+In the first line, the function validate_float is defined. It takes user_input, a string as a parameter and returns a boolean. In the next three lines, I used try to tell the program to check if user_input can be converted to a float. If it is possible, the program returns True. If user_input cannot be converted to a float, it will cause a ValueError. In the next line, I use except ValueError to prevent the program from producing an error and stopping the code, but to return False instead.
 
 ## Creating a New Transaction (Success Criteria 3 & 5)
-The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and while loops.
-
+The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements, while loops, input validations, and the csv module.
 ```.py
 def create_transaction(select: int, name: str, categories: list):
     """Creates a new transaction and adds the transaction to the user's csv file.
@@ -217,29 +235,31 @@ def create_transaction(select: int, name: str, categories: list):
     :param categories: list
         A list containing strings of categories for deposits for the user to select from
     """
-    action_date = datetime.date.today()
-    if select == 1:  # User Create Transaction
+
+    if select == 1:  # User Creates New Transaction
         print("[New Deposit]")
         raw_dep = input("Enter amount of DAI you would like to deposit: ")
         while not validate_float(raw_dep):
             raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = float(raw_dep)
         category = "deposit"
-    if select == 2:
+    if select == 2:  # User Creates New Withdrawal
         print("[New Withdrawal]")
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not validate_float(raw_wtd):
-            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
+            raw_wtd = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = float(raw_wtd)
-        print(sr)
         print("Select a Category for your Withdrawal:")
         display_menu(categories)
         category = categories[validate_selection(categories)-1].lower()
 
-    with open(f"{name}.csv", 'a') as user_data:
-        user_data.writelines(f"{action_date},{action_value},{category}\n")
-    print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
+    with open(f"{name}.csv", mode='a') as user_data:
+        user_data.writelines(f"{datetime.date.today()},{action_value},{category}\n")
+    print(f"Transaction Recorded: On {datetime.date.today()}, {action_value} DAI as {category} on {name}'s wallet.")
 ```
+In the first line, the function create_transaction is defined. It takes select: an integer, name: a string, and categories: a list, as parameters. In the next line, I use an if statement that checks if the argument given for select is equal to 1. If this is True, in the next line, the program prints a simple heading letting the user know they are creating a new deposit. Next, the program stores a user input for the amount to be deposited in the variable raw_dep. Using a while loop and the previosuly defined function validate_float, I validate raw_dep by checking if it is a value that can be converted to a float. If the validate_float function returns False when taking raw_dep as an argument, a new user_input is stored as raw_dep. The while loop continues until raw_dep can be converted into a float, and the loop ends. In the next line, the variable action_value is created and stores the flaot value of raw_dep. As the user selected to create a deposit, the variable category stores the string "deposit."
+In the next line, I use an if statement again that checks if the argument given for select is equal to 2. If this is True, the program prints a simple heading letting the user know they are creating a new withdrawal. In the next line, the variable raw_wtd is created and stores a user input for the amount to be withdrawn. Using the same method as for creating a transaction, a while loop will keep asking the user for a new raw_wtd while raw_wtd cannot be converted to a float. Once the while loop ends, raw_wtd is converted to a float and sotred in the variable action_value. Next, a message is printed to ask the user to choose a category for their withdrawal. Using the display_menu function defined previously, I print a menu using the argument for categories. Then, I call the previously defined validate_selection function to take the user's selection from the menu. The integer returned -1 (as the first item ina  list is index 0) represents the index of the option the user chose. Therefore I store the item at that index in categories as the variable category.
+Finally, in the last three lines of code, I use the csv module to open the user's csv file. mode='a' lets the program append to the csv file. The program writes a new line in the file containing the date of the transaction (obtained using the datetime module), the action_value, and the category. The last line prints a message to let the user know that the transaction has been recorded.
 
 ## Displaying Past Transactions (Success Criteria 6)
 As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period.
