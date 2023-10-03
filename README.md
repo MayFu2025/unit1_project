@@ -202,6 +202,7 @@ def try_login() -> tuple:
     return success, uname  #uname of current session user
 ```
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
+
 Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until the if statement is True, or it loops through every pre-existing user. In the last line, the function finally returns success and the uname as a tuple.
 
 ## Validating a Float
@@ -258,14 +259,103 @@ def create_transaction(select: int, name: str, categories: list):
     print(f"Transaction Recorded: On {datetime.date.today()}, {action_value} DAI as {category} on {name}'s wallet.")
 ```
 In the first line, the function create_transaction is defined. It takes select: an integer, name: a string, and categories: a list, as parameters. In the next line, I use an if statement that checks if the argument given for select is equal to 1. If this is True, in the next line, the program prints a simple heading letting the user know they are creating a new deposit. Next, the program stores a user input for the amount to be deposited in the variable raw_dep. Using a while loop and the previosuly defined function validate_float, I validate raw_dep by checking if it is a value that can be converted to a float. If the validate_float function returns False when taking raw_dep as an argument, a new user_input is stored as raw_dep. The while loop continues until raw_dep can be converted into a float, and the loop ends. In the next line, the variable action_value is created and stores the flaot value of raw_dep. As the user selected to create a deposit, the variable category stores the string "deposit."
+
 In the next line, I use an if statement again that checks if the argument given for select is equal to 2. If this is True, the program prints a simple heading letting the user know they are creating a new withdrawal. In the next line, the variable raw_wtd is created and stores a user input for the amount to be withdrawn. Using the same method as for creating a transaction, a while loop will keep asking the user for a new raw_wtd while raw_wtd cannot be converted to a float. Once the while loop ends, raw_wtd is converted to a float and sotred in the variable action_value. Next, a message is printed to ask the user to choose a category for their withdrawal. Using the display_menu function defined previously, I print a menu using the argument for categories. Then, I call the previously defined validate_selection function to take the user's selection from the menu. The integer returned -1 (as the first item ina  list is index 0) represents the index of the option the user chose. Therefore I store the item at that index in categories as the variable category.
+
 Finally, in the last three lines of code, I use the csv module to open the user's csv file. mode='a' lets the program append to the csv file. The program writes a new line in the file containing the date of the transaction (obtained using the datetime module), the action_value, and the category. The last line prints a message to let the user know that the transaction has been recorded.
 
 ## Displaying Past Transactions (Success Criteria 6)
-As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period.
+As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period. To do this, I first created a function that obtains previous transaction data from the user. Creating a function allows for better code reusability.
+```.py
+def obtain_data(name: str) -> list:
+    """Obtains data from a user's csv file and returns a list of lists containing the data.
+    :param name: str
+        The username of the user of the current session
+    :return: list
+        A list of lists containing the transaction date, amount, and category from the user's csv file
+    """
+
+    with open(f'{name}.csv', mode='r') as user_list:
+        transaction_database = user_list.readlines()
+    data = []
+    for item in transaction_database:
+        date, amount, category = item.strip().split(",")
+        data.append([date, amount, category])
+    return data
+```
+In the first line, I define the function obtain_data, which takes a string parameter name, and returns a list. In the second line, I use the csv module to open the user's csv file. mode='r' lets the program read the file. In the third line, each line of the csv file is stored in the variable transaction_database as a list. In the fourth line, an empty list is stored as the variable data. In the fifth line, I use a for loop to loop through each item in transaction_database. In the next line, as the data in the csv file are separated by commas, I use the strip function to remove the '\n' and then split the string by ','. I store each of the results in the three variables data, amount, and category. In the next line, I append a list containing data, amount, and category, to data. After the for loop has looped through every item in transaction_database, the function returns data.
+
+Then, I created two functions to validate user inputs.
+```.py
+def validate_year(user: str, year: str)-> str:
+    """Takes a str user input and checks if it is a valid year, and if the user's account exists in that year. Returns a str year.
+    :param user: str
+        The username of user of the current session
+    :param year: str
+        The year selected by user
+    :return year: str
+        The final year selected by user after validation
+    """
+    data = obtain_data(user)
+    earliest_year = data[0][0].split('-')[0]
+    latest_year = data[-1][0].split('-')[0]
+    while True:
+        if year.isnumeric() and int(earliest_year) <= int(year) <= int(latest_year):
+            break
+        else:
+            print("Error. The year selected you selected has no data, or you have entered a non-numeric value.")
+            year = input(f"Choose a year to view data for: ")
+    return year
+```
+
+```.py
+def validate_month(user: str, year: str, month: str) -> str:
+    """Takes a str user input and checks if it is a valid month, and if any data exists for the user in the selected month of a given year. Returns a str month.
+       :param user: str
+           The username of user of the current session
+       :param year: str
+           The year to check data for
+       :return month: str
+           The final month selected by user after validation
+       """
+    data = obtain_data(user)
+    data_exists = False
+    while not data_exists:
+        if month.isnumeric():
+            for item in data:
+                if f"{year}-" in item[0]:
+                    if f"-{int(month):02d}-" in item[0]:
+                        data_exists = True
+                        break
+            if data_exists:
+                return month
+        print("Error. The month you selected has no data, or you have entered a non-numeric value.")
+        month = input("Choose a month to view data for: ")
+```
+
+Using these functions, I created a way for the user to view their past transactions from their selected month and year.
+```.py
+print("[View Past Transactions]")
+year_selected = input("Choose a year to view data for: ")
+year_selected = validate_year(user=user, year=year_selected)
+month_selected = input("Choose a month to view data for: ")
+month_selected = validate_month(user=user, year=year_selected, month=month_selected)
+data = obtain_data(user)
+transactions_in_month = f"[All Transactions from {year_selected}/{month_selected}]\n[Date, Amount, Category]\n"
+for item in data:
+    if f"{year_selected}-{int(month_selected):02d}-" in str(item[0]):
+        date = item[0]
+        amount = item[1]
+        category = item[2]
+        transactions_in_month += f"{date}, {amount}, {category}\n"
+print(transactions_in_month)
+```
+In the first line, a header is printed to let the user know they are viewing their past transactions.
+
 
 ## Showing User Statistics (Success Criteria 4)
 As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user.
+
 
 ## Displaying a description of the cyrptocurrency (Success Criteria 2)
 As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
