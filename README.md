@@ -92,67 +92,130 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 | Usability | General ease and clarity of use                    | Let a random peer who is unfamiliar with the project use the program.                                                             | Program should not produce any errors. Ideally, the tester does not have to ask anything for clarification.                                                                                                                      |           |
 
 # Criteria C: Development
-## Create New User Option
-My client requires a log-in system (password protection) to keep their confidential data safe, and I thought of creating a way for users to create a unique username and password which they can use to log-in and obtain the same data for next use. Being able to host multiple users instead of just one on the application, would be beneficial if the client has family members, or would like to split her records between for example personal spendings, and expenses from their workplace.
+## Displaying a menu, and validating a user choice from the menu
+To start, I thought that it would be good to have a method for printing out a menu given the different choices the program wants to give to the user, and then a function that will prompt the user to choose from one of the options.
 
-In the first line, I define the function create_user. It does not take any parameters.
-
+To create this, I first made a function using a for loop that will print a simple menu.
 ```.py
+def display_menu(choices: list):
+    """Displays a menu with choices from a list.
+    :param choices: list containing strings of choices in a menu
+    """
+
+    menu = ''
+    count = 1
+    for it in choices:
+        menu += f"{it.ljust(50, '.')} type {count}\n"
+        count += 1
+    print(menu)
+```
+In the first line of code, I define the function display_menu, whihc takes a list choices, as a parameter. Next, I create a new empty string stored as the variable menu. In the next line, I create a variable called count which stores an integer, starting with 1. Next, using a for loop, the program will loop through each of the items in the given list. Each of the items in the list should be the options to be desplayed to the user, therefore in each loop, I add a new line to the menu variable containing the option, justified to the side, and a number assigned to correspond to that option, the count variable. Once the for loop has looped through every item in the list, it will print the menu variable which should now contain a menu of each of the options available to the user.
+
+Next, I created a function that will validate user inputs from when they make a choice from the options in the displayed menu. I did this using while loops and if statements.
+```.py
+def validate_selection(choices: list) -> int:
+    """Takes a list and a int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.
+    :param choices: list
+        A list containing strings of choices in a menu
+    :return: int
+        The final selection of user as an integer corresponding to the choices in list
+    """
+
+    expect = len(choices)
+    select = input(f'Select a choice between 1~{expect}: ')
+    while not select.isnumeric():
+        select = input(f"Error. Please select a choice between 1~{expect}: ")
+    while True:
+        if not select.isnumeric() or not 0 < int(select) < expect + 1:
+            select = input(f"Error. Please select a choice between 1~{expect}: ")
+        else:
+            break
+    select = int(select)
+    return select
+```
+In the first line, I define the function validate_selection, which takes the parameter choices which is a list, and returns an integer, In the next line, I create a variable expect, which represents the range of numbers the program is expecting from the user. In this case, it is the length of the list of choices, and hence the program expects the user to choose an option between the first option in the list and the last option in the list. In the next line, I create a variable select, which stores the user's input to a prompt asking them for the number corresponding to the choice they would like to make (as per the displayed menu's format). The program then checks using a while loop if select is a numeric value, or if the integer value of select is within the expected values. While either is False, the program will keep prompting the user's input for a numeric choice between the expected options and newly storing it as select until both conditions turn True. Once the if statement is True, it will go to the else statement, which prompts the for loop to break. Select is then converted into an integer before being returned from the function.
+
+## Create New User Function
+While not in the success criteria, I believed that it would be beneficial for the client if they can create multiple accounts: this way, they could share with the product their family members, or finance their personal and work expenditures separately. I thought of doing this by using csv files, while loops, and if statements.
+```.py
+print("[Create New User]")
 with open('users.csv', mode='r') as users_list:
     users_database = users_list.readlines()
-new_name = input("Create a username: ")
-if users_database:
+new_name = input("Create an alphanumeric username: ")
+while not new_name.isalnum():
+    new_name = input("Error. Please enter a username that is alphanumeric: ")
+if users_database:  # if users_database is not empty
     validate = True
-    while validate == True:
+    while validate:
         for user in users_database:
             if new_name in user:
                 new_name = input("Username already taken. Please enter another username: ")
             else:
                 validate = False
-new_pass = input("Create a password: ")
+
+new_pass = input("Create an alphanumeric password: ")
+while not new_pass.isalnum():
+    new_pass = input("Error. Please enter a password that is alphanumeric: ")
 confirm_new_pass = input("Confirm new password: ")
-validate = True
-while validate == True:
+while True:
     if confirm_new_pass != new_pass:
         new_pass = input("Passwords do not match. Create a password: ")
         confirm_new_pass = input("Confirm new password: ")
     else:
-        validate = False
+        break
+
 with open('users.csv', mode='a') as users_list:
     writer = csv.writer(users_list)
     writer.writerow([new_name, new_pass])
 with open(f"{new_name}.csv", mode='a') as user_data:
     writer = csv.writer(user_data)
     writer.writerow([datetime.date.today(), 0, "other"])
+print("New User Successfully Created. Please log-in.")
 ```
+In the first line, I print a header to let the user know that they will be creating a new user. In the next line, I use the open function from the csv module to open the file users.csv. mode='r' states that the program will only be reading the contents of the file. The csv is represented as users_list. Next, a variable users_database is created, which is a list where each item is each line of the csv file as a string. The program then prompts the user to create a username, and stores it in the variable new_name. Then, the program checks using a while loop that new_name is alphanumeric. While new_name is not alphanumeric, the program will keep prompting the user to create a new alphanumeric username and store it as new_name. When new_name is alphanumeric, the while loop finishes and the program moves on to the next line. In the next line, using an if statement, the program checks if users_database is empty. This is important as I wanted to use a while loop to loop through each line in users_databse. However, if users_database is empty, it is not possible for the program to loop through no items, therefore it will create an error. Having nothing in users_database means that there are no previous users, therefore there is also no need for the program to check if the user's newly created username new_name is already taken by another user. Should users_database be empty, the program skips the entire if statement. However, if users_database is not empty, it will run the contents of the if statement. In the if statement, a boolean variable validate is set as True. Next, I created a while loop for while validate is True. While validate, a for loop loops between each line (user) in users_database. It then checks using an if statement if new_name is in user. If True, it means that the newly created username already exists, therefore the program will prompt the user to create a new username and stores it as new_name. If False, the username is not taken, therefore validate is switched to False and the for loop ends.
+In the next section, the user creates a new password. First, the user is prompted to create a new password which is stored as a new variable new_pass. Then, using a while loop, the program checks if new_pass is alphanumeric. While new_pass is not alphanumeric, the program will keep asking for an alphanumeric password and stores it in new_pass. When new_pass is alphanumeric, the for loop ends. Next, the user is asked to confirm their new password. Their input is stored as the variable confirm_new_pass. In a while True loop, I used an if statement to check if new_pass is the same as confirm_new_pass. If False, the program asks again for a new password, storing it in new_pass, and another confirmation, storing it in confirm_new_pass. The while loop will keep doing this process until new_pass is equal to confirm_new_pass and the if statement outputs True. If True, the loop is broken, as per the else statement.
+Now that all of the required information is provided, I use the csv module again to add this information into the database. Using the open function I open the file users.csv again. mode='a' states that the program can now append to the file (now called as users_list). The function csv.writer() states that the program will now write onto users_list, and writer.writerow() writes the variable new_name and new_pass two comma separated values in a row of the file. Using the same method, I then open a csv file new_name.csv in the same mode='a' as user_data. As this is a new user, for the first time, the function creates a new csv file of the name specified. As I want to use this csv file to store the user's transaction data, I write a row on the file containing today's date (datetime.date.today() from the datetime module returns today's date in the format year-month-day), 0 (the amount of DAI the user has), and "other". Once this is done, a message is printed to let the user know that the program has recorded them as a new user, and that the process is finished.
 
-## Login System
-My client requires a system to protect the private data. I thought about using a login system to accomplish this requirement using a if condition and the open command to work with a csv file.
-
-In the first line, I define the function try_login. The try_login function takes two parameters. name, which is a string, and password, which is also a string. The function should have a boolean output representing True if the user logs in correctly, and False if they do not.
-
-From the second line to the third line, I save the user information which is stored in a csv file as a variable called data. The user.csv file contains user log-in data as comma separated values (username),(password). The open function takes two parameters. First, the csv file for the function to open, and second, the mode of what the function will do with the csv file. The mode 'r' tells the program to read the content of the csv file opened. The line 'as f' saves the file as the variable f, making it easier call other functions with the csv file later. Using the function readlines(), the program saves each line of the file f as an item in the list 'data'.
-
-From the fourth line to the final line, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, the variable success, a boolean which represents whether the user has successfully logged in or not, is defined. When first defined, success is False. In the next line, a for loop is started, which will loop between every line (item in lsit, string) in data (list). For ever line, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.)
-
-In the next line, the program checks for two comparisons: if uname defined above is equal to the argument provided for the name parameter, and if upass defined above is equal to the argument provided for the password parameter. When both of these comparisons are True, the program inside the if statement will run. When True, the success variable becomes True, and the loop is broken. Else, the for loop will keep repeating the steps inside.
-
-Once the loop has gone through all lines in data (the csv file), or the if statement is True and the loop has been broken, the function finishes and returns the variable success.
+## Displaying a description of the cyrptocurrency
+As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
 ```.py
-def try_login(name: str, password: str) -> bool:
-    with open('users.csv', mode='r') as f:
-        data = f.readlines()
 
-    success = False
-    for line in data:
-        uname = line.split(',')[0]
-        upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
-
-        if uname == name and upass == password:
-            success = True
-            break
-
-    return success
 ```
 
-## Creating a New User
+## Creating a New Transaction
+As per success criteria 3: The electronic ledger allows to enter, withdraw and record transactions, I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and 
+
+```.py
+def create_transaction(select: int, name: str, categories: list):
+    """Creates a new transaction and adds the transaction to the user's csv file.
+    :param select: int
+        The user's selection of transaction type
+    :param name: str
+        The username of the user of the current session
+    :param categories: list
+        A list containing strings of categories for deposits for the user to select from
+    """
+    action_date = datetime.date.today()
+    if select == 1:  # User Create Transaction
+        print("[New Deposit]")
+        raw_dep = input("Enter amount of DAI you would like to deposit: ")
+        while not validate_float(raw_dep):
+            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
+        action_value = float(raw_dep)
+        category = "deposit"
+    if select == 2:
+        print("[New Withdrawal]")
+        raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
+        while not validate_float(raw_wtd):
+            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
+        action_value = -(float(raw_wtd))
+        print(sr)
+        print("Select a Category for your Withdrawal:")
+        display_menu(categories)
+        category = categories[validate_selection(categories)-1].lower()
+
+    with open(f"{name}.csv", 'a') as user_data:
+        user_data.writelines(f"{action_date},{action_value},{category}\n")
+    print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
+```
+## 
