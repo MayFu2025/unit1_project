@@ -208,14 +208,7 @@ def try_login() -> tuple:
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
 Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, that means the user inputted username is the same as that being looped, and the password corresponding to that username has been correctly inputted. Therefore, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until it either finds an existing username that is the same as the user inputted username and its password is equal to that of the user inputted password, or it finishes looping through every existing user. The function finally returns success and the uname (which will be the user of the current session) as a tuple.
 
-
-## Displaying a description of the cyrptocurrency
-As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
-```.py
-
-```
-
-## Creating a New Transaction
+## Creating a New Transaction (NOTE TO SELF REMEMBER THIS IS ALSO SUCCESS CRITERIA 55555555)
 As per success criteria 3: The electronic ledger allows to enter, withdraw and record transactions, I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements and 
 
 ```.py
@@ -251,4 +244,16 @@ def create_transaction(select: int, name: str, categories: list):
         user_data.writelines(f"{action_date},{action_value},{category}\n")
     print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
 ```
-## 
+
+## Displaying Past Transactions
+As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period.
+
+## Showing User Statistics
+As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user.
+
+## Displaying a description of the cyrptocurrency
+As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
+```.py
+
+```
+
