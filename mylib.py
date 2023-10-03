@@ -2,7 +2,10 @@ import csv, datetime, maskpass
 
 
 def display_menu(choices: list):
-    '''Takes a list and prints a menu with each item of the list being a choice in the menu.'''
+    """Displays a menu with choices from a list.
+    :param choices: list containing strings of choices in a menu
+    """
+
     menu = ''
     count = 1
     for it in choices:
@@ -12,11 +15,15 @@ def display_menu(choices: list):
 
 
 def validate_selection(choices: list) -> int:
-    '''Takes a list and an int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.'''
+    """Takes a list and a int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.
+    :param choices: list
+        A list containing strings of choices in a menu
+    :return: int
+        The final selection of user as an integer corresponding to the choices in list
+    """
+
     expect = len(choices)
     select = input(f'Select a choice between 1~{expect}: ')
-    while not select.isnumeric():
-        select = input(f"Error. Please select a choice between 1~{expect}: ")
     while True:
         if not select.isnumeric() or not 0 < int(select) < expect + 1:
             select = input(f"Error. Please select a choice between 1~{expect}: ")
@@ -26,6 +33,14 @@ def validate_selection(choices: list) -> int:
     return select
 
 def validate_year(user: str, year: str)-> str:
+    """Takes a str user input and checks if it is a valid year, and if the user's account exists in that year. Returns a str year.
+    :param user: str
+        The username of user of the current session
+    :param year: str
+        The year selected by user
+    :return year: str
+        The final year selected by user after validation
+    """
     data = obtain_data(user)
     earliest_year = data[0][0].split('-')[0]
     latest_year = data[-1][0].split('-')[0]
@@ -37,7 +52,16 @@ def validate_year(user: str, year: str)-> str:
             year = input(f"Choose a year to view data for: ")
     return year
 
-def validate_month(user: str, month: str, year: str) -> str:
+
+def validate_month(user: str, year: str, month: str) -> str:
+    """Takes a str user input and checks if it is a valid month, and if any data exists for the user in the selected month of a given year. Returns a str month.
+       :param user: str
+           The username of user of the current session
+       :param year: str
+           The year to check data for
+       :return month: str
+           The final month selected by user after validation
+       """
     data = obtain_data(user)
     data_exists = False
     while not data_exists:
@@ -52,22 +76,15 @@ def validate_month(user: str, month: str, year: str) -> str:
         print("Error. The month you selected has no data, or you have entered a non-numeric value.")
         month = input("Choose a month to view data for: ")
 
-# def validate_selection(choices: list)-> int:
-#     '''Takes a list and a int user input, checks if the user input is within the number of choices available in the menu. Returns the int selection.'''
-#     expect = len(choices)
-#     select = input(f'Select a choice between 1~{expect}: ')
-#     while not select.isnumeric():
-#         select = input(f"Error. Please select a choice between 1~{expect}: ")
-#         try:
-#             select = int(select)
-#         except ValueError:
-#             select = input(f"Error. Please select a choice between 1~{expect}: ")
-#     while not 0 < int(select) < expect+1:
-#         select = input(f"Error. Please select a choice between 1~{expect}: ")
-#         return int(select)
 
 def validate_float(user_input: str) -> bool:
-    '''Takes a str user input and checks if it is a float. Returns a boolean.'''
+    """Takes a str user input and checks if it is a valid float. Returns a bool.
+    :param user_input: str
+        The user input to be validated
+    :return: bool
+        True if user input is a valid float, False if user input is not a valid float
+    """
+
     try:
         float(user_input)
         return True
@@ -76,7 +93,11 @@ def validate_float(user_input: str) -> bool:
 
 
 def try_login() -> tuple:
-    '''Tests if user can successfully log in. Returns a tuple on bool: success of log-in, and str: user of current session.'''
+    """Takes user input for username and password, and checks if the username and password is in one line in users.csv. Returns a tuple containing a bool and a str.
+    :return: tuple
+        A tuple containing a bool and a str. The bool is True if the username and password exist together, and False if the username and password do not match existing data. The str is the username of the user.
+    """
+
     print("[Log-in]")
     with open('users.csv', mode='r') as f:
         data = f.readlines()
@@ -97,7 +118,8 @@ def try_login() -> tuple:
 
 
 def create_user():
-    '''Creates a new user and adds them to users.csv. Takes user input new_name and new_pass.'''
+    """Creates a new user and adds the user to users.csv."""
+
     print("[Create New User]")
     with open('users.csv', mode='r') as users_list:
         users_database = users_list.readlines()
@@ -131,7 +153,14 @@ def create_user():
 
 
 def create_transaction(select: int, name: str, categories: list):
-    '''Creates a transaction for the user. Takes user input select, name, and expense_categories.'''
+    """Creates a new transaction and adds the transaction to the user's csv file.
+    :param select: int
+        The user's selection of transaction type
+    :param name: str
+        The username of the user of the current session
+    :param categories: list
+        A list containing strings of categories for deposits for the user to select from
+    """
     action_date = datetime.date.today()
     if select == 1:  # User Create Transaction
         print("[New Deposit]")
@@ -145,7 +174,7 @@ def create_transaction(select: int, name: str, categories: list):
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not validate_float(raw_wtd):
             raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
-        action_value = -(float(raw_wtd))
+        action_value = float(raw_wtd)
         print(sr)
         print("Select a Category for your Withdrawal:")
         display_menu(categories)
@@ -157,7 +186,13 @@ def create_transaction(select: int, name: str, categories: list):
 
 
 def obtain_data(name: str) -> list:
-    """Obtains data from a csv file and returns a list of lists with each list containing the date, amount, and category of a transaction."""
+    """Obtains data from a user's csv file and returns a list of lists containing the data.
+    :param name: str
+        The username of the user of the current session
+    :return: list
+        A list of lists containing the transaction date, amount, and category from the user's csv file
+    """
+
     with open(f'{name}.csv', mode='r') as user_list:
         transaction_database = user_list.readlines()
     data = []
@@ -168,6 +203,13 @@ def obtain_data(name: str) -> list:
 
 
 def find_scale(data: list) -> int:
+    """Finds the scale of a bar chart based on the smallest value of the amount to be graphed.
+    :param data: list
+        A list of lists containing the transaction date, amount, and category from the user's csv file
+    :return: int
+        The scale of one symbol of the bar chart
+    """
+
     data.sort()
     smallest = abs(data[0])
     multiple = 1
@@ -176,8 +218,18 @@ def find_scale(data: list) -> int:
     return multiple
 
 
-def month_statistics(data: list, month: int, year: int):  # to validate month, use a list with numbers from 1 to 12
-    """Find the total profit and loss in a specified month of a specified year."""
+def month_statistics(data: list, month: int, year: int):
+    """Find the total profit and loss in a user specified month of a user specified year.
+    :param data: list
+        A list of lists containing the transaction date, amount, and category from the user's csv file
+    :param month: int
+        The month to check data for
+    :param year: int
+        The year to check data for
+    :return: list
+        A list containing the total profit and loss in a specified month of a specified year
+    """
+
     profit = 0
     loss = 0
     for item in data:
@@ -185,12 +237,22 @@ def month_statistics(data: list, month: int, year: int):  # to validate month, u
             if item[2] == 'deposit':
                 profit += float(item[1])
             else:
-                loss += -(float(item[1]))
+                loss += float(item[1])
     return [profit, loss]
 
 
 def month_spending(data: list, month: int, year: int) -> list:
-    """Find the total spending in each category in a specified month of a specified year."""
+    """Find the total spending in each category in a user specified month of a user specified year.
+    :param data: list
+        A list of lists containing the transaction date, amount, and category from the user's csv file
+    :param month: int
+        The month to check data for
+    :param year: int
+        The year to check data for
+    :return: list
+        A list containing the total spending in each category in a specified month of a specified year
+    """
+
     bills = 0
     necessities = 0
     transportation = 0
@@ -208,14 +270,25 @@ def month_spending(data: list, month: int, year: int) -> list:
                 subscriptions += float(item[1])
             elif item[2] == 'other':
                 other += float(item[1])
-    return [-bills, -necessities, -transportation, -subscriptions, -other]
+    return [bills, necessities, transportation, subscriptions, other]
 
 
 def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
-    """Creates a bar chart with a title, categories, amounts, and a scale."""
+    """Creates a bar chart based on the title, category, amounts, and scale provided.
+    :param title: str
+        The title of the bar chart
+    :param category: list
+        A list containing strings of categories of each bar in the bar chart
+    :param amounts: list
+        A list containing the amounts for each category in the bar chart
+    :param scale: int
+        The scale of the amount one symbol represents in the bar chart
+    :return: str
+        A string containing the bar chart
+    """
+
     bar_chart = f"{title}\n"
-    for i in range(
-            len(category)):  # TODO: the round function only rounds to nearest whole, is it possible to round to nearest multiple of scale?
+    for i in range(len(category)):
         amount_bar = abs(amounts[i]) // scale
         bar_category = f"{category[i].ljust(20)}"
         for x in range(int(amount_bar)):
