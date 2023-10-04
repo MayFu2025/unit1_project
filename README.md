@@ -90,6 +90,16 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 | Usability   | General ease and clarity of use                    | Let a random peer who is unfamiliar with the project use the program.                                                                       | Program should not produce any errors. Ideally, the tester does not have to ask anything for clarification.                                                                                                                      |
 
 # Criteria C: Development
+## Techniques used
+1. Functions
+2. For/While loops
+3. Input validation
+4. If statements
+
+## Modules used
+1. datetime
+2. csv
+
 ## Displaying a menu, and validating a user choice from the menu
 To provide the user with a clear and legible interface to show the various options available, I chose to use functions. To create this, I first made a function using a for loop that will print a simple menu.
 ```.py
@@ -208,7 +218,7 @@ Next, I use a for loop to check if the current user can log-in. The for loop loo
 ## Creating a new transaction (Success Criteria 3 & 5)
 The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements, while loops, input validations, and the csv module.
 
-As DAI is a currency osft-pegged to the USD which is precise to 2 decimal places, the client should be able to input deposit and withdrawal values to at least 2 decimal places. As a way to check if a value is a float does not exist, I defined a function that will do this for me using exception handling.
+As DAI is a currency soft-pegged to the USD which is precise to 2 decimal places, the client should be able to input deposit and withdrawal values to at least 2 decimal places. As a way to check if a value is a float does not exist, I defined a function that will do this for me using exception handling.
 ```.py
 def validate_float(user_input: str) -> bool:
     """Takes a str user input and checks if it is a valid float. Returns a bool.
@@ -226,6 +236,13 @@ def validate_float(user_input: str) -> bool:
 ```
 In the first line, the function validate_float is defined. It takes user_input, a string as a parameter and returns a boolean. In the next three lines, I used try to tell the program to check if user_input can be converted to a float. If it is possible, the program returns True. If user_input cannot be converted to a float, it will cause a ValueError. In the next line, I use except ValueError to prevent the program from producing an error and stopping the code, but to return False instead.
 
+For the user to be able to create a transaction, I created a function where the user can choose to create either a deposit or withdrawal. In combination with the display_menu and validate_selection functions defined above, I can print a menu asking for the user's choice in either making a deposit or withdrawal.
+```.py
+display_menu(transaction_menu)  #transaction_menu = ["Create Deposit", "Create Withdrawal"]
+choice_a = validate_selection(transaction_menu)
+```
+
+The variable choice_a should either be 1 or 2, where 1 represents creating a new deposit, and 2 represents creating a new withdrawal. The value of choice_a can be used as an argument in the following function.
 ```.py
 def create_transaction(select: int, name: str, categories: list):
     """Creates a new transaction and adds the transaction to the user's csv file.
