@@ -205,7 +205,9 @@ In the first line, I define the function try_login, which returns a tupe contain
 
 Next, I use a for loop to check if the current user can log-in. The for loop loops between every line (string) in data (list) defined above. For every line, using the split function, the program splits the line by ',' and stores the 0 index value as the uname variable, and the 1 index value as the upass variable. (The upass variable needs the strip() function, as it is the end of a line in the csv file, and hence '\n' representing the start of a new line is at the end of the string. The strip() function removes the '\n'.) Then an if statement checks if uname is equal to in_name, and upass is equal to in_pass. When both comparisons are True, success can be switched to True, and the for loop is broken. Otherwise, the program keeps looping through every pre-existing user in the database until the if statement is True, or it loops through every pre-existing user. In the last line, the function finally returns success and the uname as a tuple.
 
-## Validating a Float
+## Creating a new transaction (Success Criteria 3 & 5)
+The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements, while loops, input validations, and the csv module.
+
 As DAI is a currency osft-pegged to the USD which is precise to 2 decimal places, the client should be able to input deposit and withdrawal values to at least 2 decimal places. As a way to check if a value is a float does not exist, I defined a function that will do this for me using exception handling.
 ```.py
 def validate_float(user_input: str) -> bool:
@@ -224,8 +226,6 @@ def validate_float(user_input: str) -> bool:
 ```
 In the first line, the function validate_float is defined. It takes user_input, a string as a parameter and returns a boolean. In the next three lines, I used try to tell the program to check if user_input can be converted to a float. If it is possible, the program returns True. If user_input cannot be converted to a float, it will cause a ValueError. In the next line, I use except ValueError to prevent the program from producing an error and stopping the code, but to return False instead.
 
-## Creating a New Transaction (Success Criteria 3 & 5)
-The electronic ledger should allow the user to enter, withdraw and record transactions. Therefore I created a function that allows the user to enter a new transaction to be recorded in the ledger. To achieve this, I used a combination of if statements, while loops, input validations, and the csv module.
 ```.py
 def create_transaction(select: int, name: str, categories: list):
     """Creates a new transaction and adds the transaction to the user's csv file.
@@ -264,7 +264,7 @@ In the next line, I use an if statement again that checks if the argument given 
 
 Finally, in the last three lines of code, I use the csv module to open the user's csv file. mode='a' lets the program append to the csv file. The program writes a new line in the file containing the date of the transaction (obtained using the datetime module), the action_value, and the category. The last line prints a message to let the user know that the transaction has been recorded.
 
-## Displaying Past Transactions (Success Criteria 6)
+## Displaying past transactions (Success Criteria 6)
 As per success criteria 6: The electronic ledger can display all transactions made in a specified month of a specified year, I created a function that allows for the user to select a month and year and then display all transactions during that period. To do this, I first created a function that obtains previous transaction data from the user. Creating a function allows for better code reusability.
 ```.py
 def obtain_data(name: str) -> list:
@@ -285,7 +285,7 @@ def obtain_data(name: str) -> list:
 ```
 In the first line, I define the function obtain_data, which takes a string parameter name, and returns a list. In the second line, I use the csv module to open the user's csv file. mode='r' lets the program read the file. In the third line, each line of the csv file is stored in the variable transaction_database as a list. In the fourth line, an empty list is stored as the variable data. In the fifth line, I use a for loop to loop through each item in transaction_database. In the next line, as the data in the csv file are separated by commas, I use the strip function to remove the '\n' and then split the string by ','. I store each of the results in the three variables data, amount, and category. In the next line, I append a list containing data, amount, and category, to data. After the for loop has looped through every item in transaction_database, the function returns data.
 
-Then, I created two functions to validate user inputs.
+Then, I created two functions to validate user inputs. The firt ensures that the year the user wishes to check contains transaction data for the user. 
 ```.py
 def validate_year(user: str, year: str)-> str:
     """Takes a str user input and checks if it is a valid year, and if the user's account exists in that year. Returns a str year.
@@ -307,7 +307,9 @@ def validate_year(user: str, year: str)-> str:
             year = input(f"Choose a year to view data for: ")
     return year
 ```
+The function takes user, a string, and year, a string as parameters. The function returns a string, which is the final year selected by the user. The program uses the obtain_data function defined above to find the date of the user's first transaction, and the date of the user's last transaction using the index. Taking the date, the program splits the date into year, month, and date using the split function, and stores the each of the years as the variable earliest_year and latest_year. Within a continuous while loop, the program then checks in an if statement that year argument is numeric, and the integer value of the year is between the integer values of earliest_year and latest_year. If the statement is True, the while loop is broken. Else, the program prints a message telling the user that they have inputted an invalid year, and asks for a new user input stored as year, and continues the while loop. Once the while loop is broken, the function returns year.
 
+The following function ensures that data from the month in the year the user specified exists. 
 ```.py
 def validate_month(user: str, year: str, month: str) -> str:
     """Takes a str user input and checks if it is a valid month, and if any data exists for the user in the selected month of a given year. Returns a str month.
@@ -332,6 +334,7 @@ def validate_month(user: str, year: str, month: str) -> str:
         print("Error. The month you selected has no data, or you have entered a non-numeric value.")
         month = input("Choose a month to view data for: ")
 ```
+The function takes user: a string, year: a string and month: a string as parameters. The function returns a string, which is the final month selected by the user. Similar to the validate_year function, the program uses the obtain_data function defined above to obtain transaction data for the user and sotres it in data. A boolean variable data_exists is then set as False. A while loop will continue to loop while data_exists is False. An if statement first checks if month is numeric. If True, another for loop loops through each item in data. An if statement first checks if the date of the transaction recorded in the item contains year. If True, another if statement checks if the date of the transaction contains the month selected by the user. If True, data_exists is switched to True and the for loop is broken. The program moves on to an if statement checking if data_exists is True. If True, the function returns month. Otherwise, the for loop will keep looping through every item in data until the if statement turns True, or it reaches the final item. If data_exists is still False, then a message lets the user know that the month they selected has no data or is a non-numeric value, and stores a new user input in month. The while loop continues until the if conditions are met.
 
 Using these functions, I created a way for the user to view their past transactions from their selected month and year.
 ```.py
@@ -350,16 +353,41 @@ for item in data:
         transactions_in_month += f"{date}, {amount}, {category}\n"
 print(transactions_in_month)
 ```
-In the first line, a header is printed to let the user know they are viewing their past transactions.
+In the first line, a header is printed to let the user know they are viewing their past transactions. In the next line, the program takes a user input and stores it in year_selected. In the next line, the validate_year function defined above is used to make sure data for the year the user request exists, and newly stores the output as year_selected. In the next two lines, the program does the same for the user's choice of month, storing a user input first as month_selected before calling the validate_month function to ensure data exists. In the following line, user data is retrieved using the obtain_data function defined above, and stored in the variable data. In the next line, transactions_in_month, a new variable storing a string is created. It initially contains a title for the transactions that will be displayed, and the format they will be written in. In the next line, I start a for loop that will loop through each item in data. An if statement checks to see if the item contains year_selected and month_selected in the right order in the date (index 0). If True, the program stores the value of index 0 of the item as the variable date, value of index 1 of the item as the variable amount, and the value of index 2 of the item as the variable category. In the next line, these are combined into one f-string in the order of date, amount, category and added as a new line to transactions_in_month. Once the for loop has looped through every item, transactions_in_month gets printed, showing the user all of the transactions made in their specified month and year.
 
+## Displaying basic user statistics (Success Criteria 4)
+As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user using for loops and if statements.
+```.py
+data = obtain_data(name=user)
+total = 0
+profit = 0
+loss = 0
+for item in data:
+    transaction = float(line[1])  # each line is a list in the format [date, amount, category]
+    category = line[2]
+    if category == "deposit":
+        total += transaction
+        profit += transaction
+    else:
+        loss += transaction
+        total -= transaction
+if total < 0:
+    debt_state = True
+else:
+    debt_state = False
 
-## Showing User Statistics (Success Criteria 4)
-As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user.
-
+print(f"[User Statistics]")
+print(f"User was created on: {data[0][0]}\nUser's current balance: {total} DAI\nIn debt?: {debt_state}\n")
+print(f"Total profit since creation of account: {profit}DAI\nTotal loss since creation of account: {loss}DAI\nProfit to Loss Ratio: {round(profit / loss, 2)}\n")
+```
+First, I use the obtain_data function defined above to store the user's transactions as a list of lists in the variable data. Then I initialize each of the variables total, profit, and loss as 0. In the next line, I start a for loop that loops through each item in data. Next, a new variable transaction stores the float value of line[1], which is the amount of transaction. Next, the program stores the value of line[2] as the variable category. In the next line, an if statement checks if category is equal to "deposit". If True, the program adds the value of transaction to total, and profit. If False, the program goes to the else statement which adds transaction to loss, and minuses transaction from total. The for loop keeps going until it has gone through every item in data. When the for loop has ended, an if statement checks if total is less than 0. If so, the variable debt_state is initialized as True. Else, debt_state is initialized as False. 
+In the next line, the program prints a heading that lets the user know they are looking at their statistics. In the next line, information about the user's account's creation date, current balance, and whether they are in debt or not is printed. In the final line, statistics such as the user's total profit, total loss, and their profit to loss ratio is printed.
 
 ## Displaying a description of the cyrptocurrency (Success Criteria 2)
 As per success criteria 2: The electronic ledger display the basic description of the cyrptocurrency selected, in this section of the program, I coded a way for the user to be able to see the description of the DAI token.
 ```.py
-
+print("[Description of DAI Currency]")
+print("Dai is a token created by MakerDAO, running on the Ethereum blockchain, aims to bring \nstability to the cryptocurrency economy as an unbiased, decentralized stablecoin.\nThe value of 1 Dai token is pegged to approximately 1 USD.\nDai is generated by depositing collateral assets into Maker Vaults in the Maker Protocol.\nThis creates high liquidity and low volatility for Dai.")
 ```
+In the first line, a header is printed to let the user know that they have selected to read a description of DAI currency. In the next line, a short description of the token is printed for the user to read.
 
