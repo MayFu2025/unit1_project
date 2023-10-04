@@ -158,6 +158,7 @@ It would be beneficial for the client if they can create multiple accounts: this
 ```.py
 print("[Create New User]")
 with open('users.csv', mode='r') as users_list:
+    # Reads the csv file and stores the data in a list
     users_database = users_list.readlines()
 new_name = input("Create an alphanumeric username: ")
 while not new_name.isalnum():
@@ -183,9 +184,11 @@ while True:
         break
 
 with open('users.csv', mode='a') as users_list:
+    # Adds to the csv file the new user's details
     writer = csv.writer(users_list)
     writer.writerow([new_name, new_pass])
 with open(f"{new_name}.csv", mode='a') as user_data:
+    # Creates the csv file for the new user's transaction data
     writer = csv.writer(user_data)
     writer.writerow([datetime.date.today(), 0, "other"])
 print("New User Successfully Created. Please log-in.")
@@ -207,6 +210,7 @@ def try_login() -> tuple:
 
     print("[Log-in]")
     with open('users.csv', mode='r') as f:
+        # Reads the csv file containing the usernames and passwords
         data = f.readlines()
     success = False
 
@@ -221,7 +225,7 @@ def try_login() -> tuple:
             success = True
             break
 
-    return success, uname  #uname of current session user
+    return success, uname  # success of login, uname of current session user
 ```
 In the first line, I define the function try_login, which returns a tupe containing a boolean and string. In the next line, I print a short header to show the user that they will now be logging in to their account. Next, using the open function from the csv module, I open users.csv which contains the usernames of all of the users registered on the product and the passwords to each of the usernames. The code mode='r' specifies that the program will only read the contents of the file. In the next line, the content of each line is saved as a list in the variable data, using the readlines function. Next, the program will use the data obtained in the previous lines to determine if the user may now log-in to the ledger or not. First, a new variable success, representing whether the current session user has successfully logged into an account or not is stored as a boolean, False. Then, a user input prompting the user for a username is stored as the variable in_name. A user input prompting the user for the corresponding password is stored as the variable in_pass.
 
@@ -284,6 +288,7 @@ def create_transaction(select: int, name: str, categories: list):
         category = categories[validate_selection(categories)-1].lower()
 
     with open(f"{name}.csv", mode='a') as user_data:
+        # Adds to the user's csv file the new transaction
         user_data.writelines(f"{datetime.date.today()},{action_value},{category}\n")
     print(f"Transaction Recorded: On {datetime.date.today()}, {action_value} DAI as {category} on {name}'s wallet.")
 ```
@@ -305,6 +310,7 @@ def obtain_data(name: str) -> list:
     """
 
     with open(f'{name}.csv', mode='r') as user_list:
+        # Reads the csv file containing the user's transaction data
         transaction_database = user_list.readlines()
     data = []
     for item in transaction_database:
