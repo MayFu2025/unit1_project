@@ -26,7 +26,7 @@ def validate_selection(choices: list) -> int:
     select = input(f'Select a choice between 1~{expect}: ')
     while True:
         if not select.isnumeric() or not 0 < int(select) < expect + 1:
-            select = input(f"Error. Please select a choice between 1~{expect}: ")
+            select = input(f"{ansi.get('red')}Error. Please select a choice between 1~{expect}: {ansi.get('reset')}")
         else:
             break
     select = int(select)
@@ -48,7 +48,7 @@ def validate_year(user: str, year: str)-> str:
         if year.isnumeric() and int(earliest_year) <= int(year) <= int(latest_year):
             break
         else:
-            print("Error. The year selected you selected has no data, or you have entered a non-numeric value.")
+            print(f"{ansi.get('red')}Error. The year selected you selected has no data, or you have entered a non-numeric value.{ansi.get('reset')}")
             year = input(f"Choose a year to view data for: ")
     return year
 
@@ -73,7 +73,7 @@ def validate_month(user: str, year: str, month: str) -> str:
                         break
             if data_exists:
                 return month
-        print("Error. The month you selected has no data, or you have entered a non-numeric value.")
+        print(f"{ansi.get('red')}Error. The month you selected has no data, or you have entered a non-numeric value.{ansi.get('reset')}")
         month = input("Choose a month to view data for: ")
 
 
@@ -98,8 +98,9 @@ def try_login() -> tuple:
         A tuple containing a bool and a str. The bool is True if the username and password exist together, and False if the username and password do not match existing data. The str is the username of the user.
     """
 
-    print("[Log-in]")
+    print(f"{ansi.get('bold')}[Log-in]{ansi.get('reset')}")
     with open('users.csv', mode='r') as f:
+        # Reads the csv file containing the usernames and passwords
         data = f.readlines()
     success = False
 
@@ -110,44 +111,46 @@ def try_login() -> tuple:
         uname = line.split(',')[0]
         upass = line.split(',')[1].strip()  # strip() removes \n for any string unless specified
 
-        if uname == in_name and upass == in_pass:
+        if uname == in_name and upass == in_pass:  # user input matches an existing username and corresponding password
             success = True
             break
 
-    return success, uname
+    return success, uname  # success of login, uname of current session user
 
 
 def create_user():
     """Creates a new user and adds the user to users.csv."""
 
-    print("[Create New User]")
+    print(f"{ansi.get('bold')}[Create New User]{ansi.get('reset')}")
     with open('users.csv', mode='r') as users_list:
         users_database = users_list.readlines()
     new_name = input("Create an alphanumeric username: ")
     while not new_name.isalnum():
-        new_name = input("Error. Please enter a username that is alphanumeric: ")
+        new_name = input(f"{ansi.get('red')}Error. Please enter a username that is alphanumeric: {ansi.get('reset')}")
     if users_database:  # if users_database is not empty
         validate = True
         while validate:
             for user in users_database:
                 if new_name in user:
-                    new_name = input("Username already taken. Please enter another username: ")
+                    new_name = input(f"{ansi.get('red')}Username already taken. Please enter another username: {ansi.get('reset')}")
                 else:
                     validate = False
     new_pass = input("Create an alphanumeric password: ")
     while not new_pass.isalnum():
-        new_pass = input("Error. Please enter a password that is alphanumeric: ")
+        new_pass = input(f"{ansi.get('red')}Error. Please enter a password that is alphanumeric: {ansi.get('reset')}")
     confirm_new_pass = input("Confirm new password: ")
     while True:
         if confirm_new_pass != new_pass:
-            new_pass = input("Passwords do not match. Create a password: ")
+            new_pass = input(f"{ansi.get('red')}Passwords do not match.{ansi.get('reset')}Create a password: ")
             confirm_new_pass = input("Confirm new password: ")
         else:
             break
     with open('users.csv', mode='a') as users_list:
+        # Adds to the csv file the new user's details
         writer = csv.writer(users_list)
         writer.writerow([new_name, new_pass])
     with open(f"{new_name}.csv", mode='a') as user_data:
+        # Creates the csv file that stores the new user's transactions
         writer = csv.writer(user_data)
         writer.writerow([datetime.date.today(), 0, "other"])
 
@@ -163,26 +166,27 @@ def create_transaction(select: int, name: str, categories: list):
     """
     action_date = datetime.date.today()
     if select == 1:  # User Create Transaction
-        print("[New Deposit]")
+        print(f"{ansi.get('bold')}[New Deposit]{ansi.get('reset')}")
         raw_dep = input("Enter amount of DAI you would like to deposit: ")
         while not validate_float(raw_dep):
-            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
+            raw_dep = input(f"{ansi.get('red')}Error. Please enter how much DAI you would like to deposit: {ansi.get('reset')}")
         action_value = float(raw_dep)
         category = "deposit"
     if select == 2:
-        print("[New Withdrawal]")
+        print(f"{ansi.get('bold')}[New Withdrawal]{ansi.get('reset')}")
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not validate_float(raw_wtd):
-            raw_wtd = input("Error. Please enter how much DAI you would like to deposit: ")
+            raw_wtd = input(f"{ansi.get('red')}Error. Please enter how much DAI you would like to deposit: {ansi.get('reset')}")
         action_value = float(raw_wtd)
         print(sr)
         print("Select a Category for your Withdrawal:")
         display_menu(categories)
-        category = categories[validate_selection(categories)-1].lower()
+        category = categories[validate_selection(categories)-1].lower()  # list index starts at 0 therefore -1
 
     with open(f"{name}.csv", 'a') as user_data:
+        # Adds to the user's csv file the new transaction
         user_data.writelines(f"{action_date},{action_value},{category}\n")
-    print(f"Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.")
+    print(f"{ansi.get('green')}{ansi.get('bold')}Transaction Recorded: On {action_date}, {action_value} DAI as {category} on {name}'s wallet.{ansi.get('reset')}")
 
 
 def obtain_data(name: str) -> list:
@@ -194,6 +198,7 @@ def obtain_data(name: str) -> list:
     """
 
     with open(f'{name}.csv', mode='r') as user_list:
+        # Reads the csv file containing the user's transaction data
         transaction_database = user_list.readlines()
     data = []
     for item in transaction_database:
@@ -290,7 +295,7 @@ def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
     bar_chart = f"{title}\n"
     for i in range(len(category)):
         amount_bar = abs(amounts[i]) // scale
-        bar_category = f"{category[i].ljust(20)}"
+        bar_category = f"{ansi.get('bold')}{category[i].ljust(20)}{ansi.get('reset')}"
         for x in range(int(amount_bar)):
             bar_category += '▥'
         bar_chart += f"{bar_category} {abs(amounts[i])} DAI\n"
@@ -308,7 +313,7 @@ logo = """
 
 """
 
-ascii_colors = {
+ansi = {
     "reset": "\033[0m",
     "bold": "\033[1m",
     "dim": "\033[2m",
