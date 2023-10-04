@@ -380,8 +380,8 @@ total = 0
 profit = 0
 loss = 0
 for item in data:
-    transaction = float(line[1])  # each line is a list in the format [date, amount, category]
-    category = line[2]
+    transaction = float(item[1])  # each item is a list in the format [date, amount, category]
+    category = item[2]
     if category == "deposit":
         total += transaction
         profit += transaction
@@ -393,7 +393,7 @@ if total < 0:
 else:
     debt_state = False
 
-print(f"[User Statistics]")
+print("[User Statistics]")
 print(f"User was created on: {data[0][0]}\nUser's current balance: {total} DAI\nIn debt?: {debt_state}\n")
 print(f"Total profit since creation of account: {profit}DAI\nTotal loss since creation of account: {loss}DAI\nProfit to Loss Ratio: {round(profit / loss, 2)}\n")
 ```
