@@ -92,7 +92,7 @@ while login_success:
         data = obtain_data(user)
         transactions_in_month = f"[All Transactions from {year_selected}/{month_selected}]\n[Date, Amount, Category]\n"
         for item in data:
-            if f"{year_selected}-{int(month_selected):02d}-" in str(item[0]):
+            if f"{year_selected}-{int(month_selected):02d}-" in item[0]:
                 date = item[0]
                 amount = item[1]
                 category = item[2]
@@ -105,9 +105,9 @@ while login_success:
         total = 0
         profit = 0
         loss = 0
-        for line in data:
-            transaction = float(line[1])
-            category = line[2]
+        for item in data:
+            transaction = float(item[1])
+            category = item[2]
             if category == "deposit":
                 total += transaction
                 profit += transaction
