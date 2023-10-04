@@ -49,16 +49,20 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 
 ## System Diagram
 ![](assets/unit1_system_diagram.jpg)
+
 **Fig.1** *System diagram of proposed solution*
 
 ## Flow Diagrams
 ![](assets/create_transaction_project1diagram.jpg)
+
 **Fig.2** *Flow diagram of the `create_transaction` function*
 
 ![](assets/past_transactions_project1diagram.jpg)
+
 **Fig.3** *Flow diagram of program to display past transactions*
 
 ![](assets/display_statistics_project1diagram.jpg)
+
 **Fig.4** *Flow diagram of program to display user statistics*
 
 ## Record of Tasks
