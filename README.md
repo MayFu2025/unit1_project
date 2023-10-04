@@ -49,10 +49,17 @@ Although a feature that can calculate the rate of Dai to the USD can be useful, 
 
 ## System Diagram
 ![](assets/unit1_system_diagram.jpg)
-*Fig.1* System diagram of proposed solution
+**Fig.1** *System diagram of proposed solution*
 
 ## Flow Diagrams
-![]()
+![](assets/create_transaction_project1diagram.jpg)
+**Fig.2** *Flow diagram of the `create_transaction` function*
+
+![](assets/past_transactions_project1diagram.jpg)
+**Fig.3** *Flow diagram of program to display past transactions*
+
+![](assets/display_statistics_project1diagram.jpg)
+**Fig.4** *Flow diagram of program to display user statistics*
 
 ## Record of Tasks
 | Task No | Planned Action                     | Planned Outcome                                                                                             | Time estimate (min) | Target completion date | Criterion |
@@ -242,7 +249,7 @@ display_menu(transaction_menu)  #transaction_menu = ["Create Deposit", "Create W
 choice_a = validate_selection(transaction_menu)
 ```
 
-The variable choice_a should either be 1 or 2, where 1 represents creating a new deposit, and 2 represents creating a new withdrawal. The value of choice_a can be used as an argument in the following function.
+The variable choice_a should either be 1 or 2, where 1 represents creating a new deposit, and 2 represents creating a new withdrawal. The value of choice_a can be used as an argument in the following function. A flow diagram for the function can be seen in **Fig.2**.
 ```.py
 def create_transaction(select: int, name: str, categories: list):
     """Creates a new transaction and adds the transaction to the user's csv file.
@@ -353,7 +360,7 @@ def validate_month(user: str, year: str, month: str) -> str:
 ```
 The function takes user: a string, year: a string and month: a string as parameters. The function returns a string, which is the final month selected by the user. Similar to the validate_year function, the program uses the obtain_data function defined above to obtain transaction data for the user and sotres it in data. A boolean variable data_exists is then set as False. A while loop will continue to loop while data_exists is False. An if statement first checks if month is numeric. If True, another for loop loops through each item in data. An if statement first checks if the date of the transaction recorded in the item contains year. If True, another if statement checks if the date of the transaction contains the month selected by the user. If True, data_exists is switched to True and the for loop is broken. The program moves on to an if statement checking if data_exists is True. If True, the function returns month. Otherwise, the for loop will keep looping through every item in data until the if statement turns True, or it reaches the final item. If data_exists is still False, then a message lets the user know that the month they selected has no data or is a non-numeric value, and stores a new user input in month. The while loop continues until the if conditions are met.
 
-Using these functions, I created a way for the user to view their past transactions from their selected month and year.
+Using these functions, I created a way for the user to view their past transactions from their selected month and year, as can also be seen in **Fig.3**.
 ```.py
 print("[View Past Transactions]")
 year_selected = input("Choose a year to view data for: ")
@@ -373,7 +380,7 @@ print(transactions_in_month)
 In the first line, a header is printed to let the user know they are viewing their past transactions. In the next line, the program takes a user input and stores it in year_selected. In the next line, the validate_year function defined above is used to make sure data for the year the user request exists, and newly stores the output as year_selected. In the next two lines, the program does the same for the user's choice of month, storing a user input first as month_selected before calling the validate_month function to ensure data exists. In the following line, user data is retrieved using the obtain_data function defined above, and stored in the variable data. In the next line, transactions_in_month, a new variable storing a string is created. It initially contains a title for the transactions that will be displayed, and the format they will be written in. In the next line, I start a for loop that will loop through each item in data. An if statement checks to see if the item contains year_selected and month_selected in the right order in the date (index 0). If True, the program stores the value of index 0 of the item as the variable date, value of index 1 of the item as the variable amount, and the value of index 2 of the item as the variable category. In the next line, these are combined into one f-string in the order of date, amount, category and added as a new line to transactions_in_month. Once the for loop has looped through every item, transactions_in_month gets printed, showing the user all of the transactions made in their specified month and year.
 
 ## Displaying basic user statistics (Success Criteria 4)
-As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user using for loops and if statements.
+As per success criteria 4: The electronic ledger can display statistics such as profit, total spendings, total earnings, and balance, I made a program for the terminal to display these statistics to the user using for loops and if statements. This is also represented as a flow diagram in **Fig.4**.
 ```.py
 data = obtain_data(name=user)
 total = 0
