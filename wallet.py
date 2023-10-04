@@ -101,18 +101,19 @@ while login_success:
 
 
     if choice == 3:  # View User Statistics
-        with open(f'{user}.csv', mode='r') as f:
-            data = f.readlines()
+        data = obtain_data(name=user)
         total = 0
         profit = 0
         loss = 0
         for line in data:
-            transaction = float(line.split(',')[1])
-            total += transaction
-            if transaction < 0:
-                loss += transaction
-            elif transaction > 0:
+            transaction = float(line[1])
+            category = line[2]
+            if category == "deposit":
+                total += transaction
                 profit += transaction
+            else:
+                loss += transaction
+                total -= transaction
         if total < 0:
             debt_state = True
         else:
@@ -122,7 +123,7 @@ while login_success:
             print(lr)
             print(f"[User Statistics: Page 1 of 2]\n")
             print(
-                f"User was created on: {data[0].split(',')[0]}\nUser's current balance: {total} DAI\nIn debt?: {debt_state}\n")
+                f"User was created on: {data[0][0]}\nUser's current balance: {total} DAI\nIn debt?: {debt_state}\n")
             print(
                 f"Total profit since creation of account: {profit}DAI\nTotal loss since creation of account: {loss}DAI\nProfit to Loss Ratio: {round(profit / loss, 2)}\n")
             print(

@@ -173,7 +173,7 @@ def create_transaction(select: int, name: str, categories: list):
         print("[New Withdrawal]")
         raw_wtd = input("Enter amount of DAI you would like to withdraw: ")
         while not validate_float(raw_wtd):
-            raw_dep = input("Error. Please enter how much DAI you would like to deposit: ")
+            raw_wtd = input("Error. Please enter how much DAI you would like to deposit: ")
         action_value = float(raw_wtd)
         print(sr)
         print("Select a Category for your Withdrawal:")
