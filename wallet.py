@@ -61,7 +61,7 @@ if choice == 2:
     result = try_login()  # result = [login_success, user]
     login_success = result[0]
     while not login_success:
-        print(f"{ansi.get('red')}Error: Wrong username or password.{ansi.get('error')}")
+        print(f"{ansi.get('red')}Error: Wrong username or password.{ansi.get('reset')}")
         result = try_login()
         login_success = result[0]
     user = result[1]
@@ -88,9 +88,9 @@ while login_success:
         year_selected = input("Choose a year to view data for: ")
         year_selected = validate_year(user=user, year=year_selected)  # ensures that data for the year exists
         month_selected = input("Choose a month to view data for: ")
-        print(sr)
         month_selected = validate_month(user=user, year=year_selected, month=month_selected)  # ensures that data for the month of that year exists
         data = obtain_data(user)
+        print(sr)
         transactions_in_month = f"{ansi.get('bold')}[All Transactions from {year_selected}/{month_selected}]{ansi.get('reset')}\n[Date, Amount, Category]\n"
         for item in data:
             if f"{year_selected}-{int(month_selected):02d}-" in item[0]:
@@ -123,7 +123,7 @@ while login_success:
             print(lr)
             print(f"{ansi.get('bold')}[User Statistics: Page 1 of 2]{ansi.get('reset')}\n")
             print(
-                f"User was created on: {data[0][0]}\nUser's current balance: {total} DAI\nIn debt?: {debt_state}\n")
+                f"User was created on: {data[0][0]}\nUser's current balance: {round(total,2)} DAI\nIn debt?: {debt_state}\n")
             print(
                 f"Total profit since creation of account: {profit}DAI\nTotal loss since creation of account: {loss}DAI\nProfit to Loss Ratio: {round(profit / loss, 2)}\n")
             # Create Bar Chart for Total Profit/Loss

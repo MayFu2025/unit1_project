@@ -243,7 +243,7 @@ def month_statistics(data: list, month: int, year: int):
                 profit += float(item[1])
             else:
                 loss += float(item[1])
-    return [profit, loss]
+    return [round(profit,2), round(loss,2)]
 
 
 def month_spending(data: list, month: int, year: int) -> list:
@@ -275,7 +275,7 @@ def month_spending(data: list, month: int, year: int) -> list:
                 subscriptions += float(item[1])
             elif item[2] == 'other':
                 other += float(item[1])
-    return [bills, necessities, transportation, subscriptions, other]
+    return [round(bills,2), round(necessities,2), round(transportation,2), round(subscriptions,2), round(other,2)]
 
 
 def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
@@ -294,11 +294,11 @@ def create_bar(title: str, category: list, amounts: list, scale: int) -> str:
 
     bar_chart = f"{title}\n"
     for i in range(len(category)):
-        amount_bar = abs(amounts[i]) // scale
+        amount_bar = amounts[i] // scale
         bar_category = f"{ansi.get('bold')}{category[i].ljust(20)}{ansi.get('reset')}"
         for x in range(int(amount_bar)):
             bar_category += '▥'
-        bar_chart += f"{bar_category} {abs(amounts[i])} DAI\n"
+        bar_chart += f"{bar_category} {amounts[i]} DAI\n"
     bar_chart += f"Where each ▥ represents {scale} DAI"
     return bar_chart
 
