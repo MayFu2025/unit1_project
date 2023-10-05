@@ -426,5 +426,6 @@ print("Dai is a token created by MakerDAO, running on the Ethereum blockchain, a
 ```
 In the first line, a header is printed to let the user know that they have selected to read a description of DAI currency. In the next line, a short description of the token is printed for the user to read.
 
-## Video of the Product
+# Extra Criteria: Video of the Product
+Please find the video in this Google Drive folder, under the name "Project 1- Digital Ledger"
 https://drive.google.com/drive/folders/1tMNTtgjcs2QFEaba9YF4Wc9Ikm9p6jiU?usp=sharing
